@@ -209,4 +209,22 @@ public class Participant implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // METHODS
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /**
+     * this method transforms the participant into a String.
+     * It returns the mail of the participant.
+     * 
+     * @return mail, String, the mail of the participant.
+     * @author Pierre Fromont Boissel
+     * @see String
+     * @see Participant
+     * @see trellolite.model.Participant#getMail()
+     */
+    public String toString() {
+        return getMail();
+    }
 }
