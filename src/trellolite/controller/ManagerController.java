@@ -533,7 +533,28 @@ public class ManagerController {
                 }
             });
         }
+// ---------------------------------------------------------------------------------------------------------------------
+// METHODS
+// ---------------------------------------------------------------------------------------------------------------------
 
+/**
+     * This method remove a participants 
+     * <br>
+     * <br>
+     * <b>WARNING:</b> This method will overwrite the data/datas.ser file.
+     * <br>
+     * <br>
+     *
+     * @param workspaceManager, WorkspaceManager, the workspaceManager object to save.
+     * @throws IOException,           if the file is not found.
+     * @throws FileNotFoundException, if the file is not found.
+     * @author Glen DENOUAL
+     * @see trellolite.style.OptionPaneStyle
+     * @see javax.swing.JOptionPane
+     * @see java.util.ArrayList
+     * @see java.lang.String
+     * @see trellolite.TrelloMain
+     */
         private void removeMember(){
             OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 
