@@ -52,7 +52,7 @@ public class CardListController {
                     // Change the name of the list
                     OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                     String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
-                    if(newName.equals("")) {
+                    if(newName.isEmpty()) {
                         optionPaneStyle.showMessageDialog(null, "Please, enter a valid name", "empty name", JOptionPane.ERROR_MESSAGE);
                         break;
                     }

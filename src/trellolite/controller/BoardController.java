@@ -86,6 +86,11 @@ public class BoardController {
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
                     String newName = ChangeBoardNameObj.toString().trim();
                     // Rename the Board model
+                    if(newName.isEmpty()){
+                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name",
+                                                    "empty name", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
                     board.setName(newName);
                     // update the Board view
                     boardView.update(board);
