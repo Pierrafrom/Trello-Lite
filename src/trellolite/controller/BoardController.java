@@ -56,9 +56,10 @@ public class BoardController {
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (actionComboBox.getSelectedIndex()) {
-                case 0 ->
+                case 0 -> {
                     // Add a new list
-                        createNewList();
+                    createNewList();
+                }
                 case 1 -> {
                     // Delete the Board
                     // Ask for confirmation
@@ -66,7 +67,6 @@ public class BoardController {
                     String message = "Are you sure you want to delete the board : " + board.getName() + " ?";
                     String title = "Confirmation";
                     boolean result = dialogController.showConfirmationDialog(message, title);
-                    int id=board.getId();
 
                     // If the user selected "Yes"
                     if (result) {
@@ -75,18 +75,20 @@ public class BoardController {
                         workspaceView.update();
                         // update the Workspace view
                     }
-                    
+
                 }
-                case 2 ->{
+                case 2 -> {
                     // Rename the Board
-                Object ChangeBoardNameObj = OptionPaneStyle.showInputDialog(null,
-                    "Enter the new name of the board:", "Board name modification",
-                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
-                String newName = ChangeBoardNameObj.toString().trim();
-                // Rename the Board model
-                board.setName(newName);
-                // update the Board view
-                workspaceView.update();
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null,
+                            "Enter the new name of the board:", "Board name modification",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                    String newName = ChangeBoardNameObj.toString().trim();
+                    // Rename the Board model
+                    board.setName(newName);
+                    // update the Board view
+                    boardView.update(board);
                 }
             }
         }
@@ -104,7 +106,7 @@ public class BoardController {
          * @see trellolite.style
          * @see javax.swing.JOptionPane
          */
-        private void createNewList(){
+        private void createNewList() {
             // Create a new OptionPaneStyle object to display dialogs with the same style
             OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 

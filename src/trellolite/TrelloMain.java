@@ -192,7 +192,7 @@ public class TrelloMain {
             // ---------------------------------------------------------------------------------------------------------
             // ADD CONTROLLERS
             // ---------------------------------------------------------------------------------------------------------
-            ManagerController managerController = new ManagerController(managerView, workspaceView, workspaceInfoView);
+            new ManagerController(managerView, workspaceView, workspaceInfoView);
 
             /*
              * To simplify the code we add the other controllers in the constructor of the View.

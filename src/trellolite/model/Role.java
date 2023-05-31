@@ -16,6 +16,6 @@ import java.io.Serializable;
  * @see Participant
  * @see Serializable
  */
-public enum Role implements Serializable {
+public enum Role {
     ADMIN, MEMBER, OBSERVER
 }
