@@ -3,6 +3,7 @@ package trellolite.controller;
 import trellolite.model.Board;
 import trellolite.model.CardList;
 import trellolite.style.ComboBoxStyle;
+import trellolite.style.OptionPaneStyle;
 import trellolite.view.BoardView;
 import trellolite.view.CardListView;
 
@@ -47,14 +48,16 @@ public class CardListController {
             switch (actionComboBox.getSelectedIndex()) {
                 case 0:
                     // Change the name of the list
-                    System.out.println("Change the name of the list");
-                    // TODO: Change the name of the list
-                    // change the name of the list model
-                    // update the view
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                    String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
+                    cardList.setName(newName);
+                    cardListView.update(cardList);
+                    break;
                 case 1:
                     // Add a new card
                     System.out.println("Add a new card");
                     // TODO: Add a new card
+                    break;
                 case 2:
                     // Delete the list
                     // Ask for confirmation
@@ -63,14 +66,16 @@ public class CardListController {
                     String title = "Confirmation";
                     boolean result = dialogController.showConfirmationDialog(message, title);
 
-                    // If the user selected "Yes"
+                    // If the user select "Yes"
                     if (result) {
-                        // TODO: Delete the List
-                        // Delete the List model from the Board model
-                        // update the Board view
+                        board.removeList(cardList);
+                        boardView.update(board);
                         System.out.println("Delete the List");
                     }
+                    break;
             }
+            actionComboBox = cardListView.getActionsComboBox();
+            actionComboBox.addActionListener(new ActionComboBoxListener());
         }
     }
 }
