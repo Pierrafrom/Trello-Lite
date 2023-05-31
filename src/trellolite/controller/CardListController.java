@@ -10,6 +10,8 @@ import trellolite.view.CardListView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 public class CardListController {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -50,6 +52,10 @@ public class CardListController {
                     // Change the name of the list
                     OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                     String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
+                    if(newName.equals("")) {
+                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name", "empty name", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
                     cardList.setName(newName);
                     cardListView.update(cardList);
 
