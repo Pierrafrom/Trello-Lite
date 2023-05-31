@@ -3,8 +3,6 @@ package trellolite.view;
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
-
-import trellolite.controller.BoardController;
 import trellolite.model.Workspace;
 import trellolite.style.TabbedPaneStyle;
 
@@ -46,10 +44,7 @@ public class WorkspaceView extends TabbedPaneStyle {
         // Add the boards to the tabbed pane
         for (int i = 0; i < workspace.getBoards().size(); i++) {
             // create a board view
-            BoardView boardView = new BoardView(workspace.getBoards().get(i));
-            // add the controller to the board view
-            BoardController boardController = new BoardController(workspace, workspace.getBoards().get(i),
-                    this, boardView);
+            BoardView boardView = new BoardView(workspace.getBoards().get(i), this);
             // add the board to the tabbed pane
             addTab(workspace.getBoards().get(i).getName(), boardView);
         }
@@ -78,10 +73,7 @@ public class WorkspaceView extends TabbedPaneStyle {
         // Add the boards to the tabbed pane
         for (int i = 0; i < workspace.getBoards().size(); i++) {
             // create a board view
-            BoardView boardView = new BoardView(workspace.getBoards().get(i));
-            // add the controller to the board view
-            BoardController boardController = new BoardController(workspace, workspace.getBoards().get(i),
-                    this, boardView);
+            BoardView boardView = new BoardView(workspace.getBoards().get(i), this);
             // add the board to the tabbed pane
             addTab(workspace.getBoards().get(i).getName(), boardView);
         }
