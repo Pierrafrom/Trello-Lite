@@ -353,7 +353,7 @@ public class ManagerController {
 
                     // Combo boxes
                     ArrayList<ComboBoxStyle> comboBoxes = new ArrayList<>();
-                    String[] Roles = {"Member", "Admin", "Observer"};
+                    String[] Roles = { "Member", "Admin", "Observer" };
                     comboBoxes.add(new ComboBoxStyle(Roles, 0, 0, 14));
 
                     // combo boxes labels
@@ -362,223 +362,232 @@ public class ManagerController {
                     createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
                 }
                 case 2 -> {
-                    System.out.println("Remove a Member");
-                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
-                    Object memberMailObject = optionPaneStyle.showInputDialog(null,
-                    "Enter the name of the member", "Remove a Member",
-                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-                    if (memberMailObject != null) {
-                        // Convert the object to a string and trim leading and trailing spaces
-                        String memberMail = memberMailObject.toString().trim();
-
-                        while (memberMail.isEmpty()) {
-                            // Display an error message indicating that the member name already exists
-                            optionPaneStyle.showMessageDialog(null, "Enter name ",
-                                    "Error", JOptionPane.ERROR_MESSAGE);
-
-                            memberMailObject = optionPaneStyle.showInputDialog(null,"Enter the name of the member", "Remove a Member",
-                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-                            memberMail = memberMailObject.toString().trim();
-                             }
-
-                        ArrayList<String> mails = new ArrayList<String>();
-                        for (Participant member : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
-                                mails.add(member.getMail());
-                         }
-                        
-                         while (!mails.contains(memberMail)) {
-                            optionPaneStyle.showMessageDialog(null, "Member name doesn't exists!",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-
-                            memberMailObject = optionPaneStyle.showInputDialog(null,"Enter the name of the member", "Remove a Member",
-                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-                            memberMail = memberMailObject.toString().trim();
-                         }           
-
-                         Participant p = null;
-                         int i = 0;
-                         ArrayList<Participant> pp = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers();
-                         while(!pp.get(i).getMail().equals(memberMail)){
-                            if(pp.get(i).getMail().equals(memberMail))
-                            p = pp.get(i);
-                        }
-                         TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).removeMember(p);
-                         workspaceInfoView.update();
-                    }  
-                }
-               
-                   
                     
-                
+                }
+
                 case 3 -> {
                     // Add a Board
                     createNewBoard();
                 }
             }
-    }
-
-    /**
-     * This method creates a new board and adds it to the selected workspace.
-     * <p>
-     * It prompts the user to enter the name of the new board.
-     * Then it creates a new board and adds it to the selected workspace.
-     * </p>
-     * 
-     * @author Pierre Fromont Boissel
-     * @see ManagerView
-     * @see trellolite.model
-     * @see trellolite.style
-     * @see javax.swing.JOptionPane
-     */
-    private void createNewBoard() {
-        // Create a new OptionPaneStyle object to display dialogs with the same style
-        OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
-        // Prompt the user to enter the name of the new board
-        Object boardNameObj = optionPaneStyle.showInputDialog(null,
-                "Enter the name of the new Board:", "New Board creation",
-                JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-        // Check if the user entered a board name
-        if (boardNameObj != null) {
-            // Convert the object to a string and trim leading and trailing spaces
-            String boardName = boardNameObj.toString().trim();
-
-            // While the board name is empty, ask the user to enter a new one
-            while (boardName.isEmpty()) {
-                // Display an error message indicating that the board name cannot be empty
-                optionPaneStyle.showMessageDialog(null, "Board name cannot be empty!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-
-                // Prompt the user to enter the board name again
-                boardNameObj = optionPaneStyle.showInputDialog(null,
-                        "Enter the name of the new board:", "New board creation",
-                        JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-                // Convert the object to a string and trim leading and trailing spaces
-                boardName = boardNameObj.toString().trim();
-            }
-
-            // Get the names of the existing boards
-            ArrayList<String> names = new ArrayList<String>();
-            for (Board board : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
-                    .getBoards()) {
-                names.add(board.getName());
-            }
-
-            // While the board name already exists, ask the user to enter a new one
-            while (names.contains(boardName)) {
-                // Display an error message indicating that the board name already exists
-                optionPaneStyle.showMessageDialog(null, "Board name already exists!",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-
-                // Prompt the user to enter the board name again
-                boardNameObj = optionPaneStyle.showInputDialog(null,
-                        "Enter the name of the new board:", "New board creation",
-                        JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-                // Convert the object to a string and trim leading and trailing spaces
-                boardName = boardNameObj.toString().trim();
-            }
-
-            // Create the new board with the user-provided name
-            Board board = new Board(boardName);
-            TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).addBoard(board);
-
-            // Update the workspace info view and the workspace view
-            workspaceInfoView.update();
-            workspaceView.update();
-
         }
-    }
 
-    /**
-     * This method creates a new ConstructorStyle object for the participant
-     * controller window.
-     * <p>
-     * It allows to create a new participant.
-     * </p>
-     *
-     * @param fields           the fields of the controller window
-     * @param comboBoxes       the combo boxes of the controller window
-     * @param comboBoxesLabels the labels of the combo boxes of the controller
-     *                         window
-     * @author Pierre Fromont Boissel
-     * @see ConstructorStyle
-     * @see trellolite.style
-     * @see java.awt.event.WindowAdapter
-     * @see java.awt.event.WindowEvent
-     * @see java.util.ArrayList
-     * @see java.lang.String
-     */
-    public void createNewParticipantController(ArrayList<String> fields, ArrayList<ComboBoxStyle> comboBoxes,
-            ArrayList<String> comboBoxesLabels) {
-        // Create a new ConstructorStyle object for the participant constructor
-        ConstructorStyle constructor = new ConstructorStyle("Add a participant",
-                400, 300, fields, comboBoxes, comboBoxesLabels);
+        /**
+         * This method creates a new board and adds it to the selected workspace.
+         * <p>
+         * It prompts the user to enter the name of the new board.
+         * Then it creates a new board and adds it to the selected workspace.
+         * </p>
+         * 
+         * @author Pierre Fromont Boissel
+         * @see ManagerView
+         * @see trellolite.model
+         * @see trellolite.style
+         * @see javax.swing.JOptionPane
+         */
+        private void createNewBoard() {
+            // Create a new OptionPaneStyle object to display dialogs with the same style
+            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 
-        // Add a WindowListener to the constructor window
-        constructor.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                // Check if the constructor was not cancelled by the user
-                if (!constructor.isCancelled()) {
-                    // Get the emails of the existing participants in the selected workspace
-                    ArrayList<String> mails = new ArrayList<>();
-                    for (Participant participant : TrelloMain.workspaceManager
-                            .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
-                        mails.add(participant.getMail());
-                    }
+            // Prompt the user to enter the name of the new board
+            Object boardNameObj = optionPaneStyle.showInputDialog(null,
+                    "Enter the name of the new Board:", "New Board creation",
+                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
-                    // Check if any of the fields is empty, display an error message and create a
-                    // new constructor
-                    if (constructor.getFieldsContent().get(0).equals("") ||
-                            constructor.getFieldsContent().get(1).equals("") ||
-                            constructor.getFieldsContent().get(2).equals("")) {
-                        OptionPaneStyle errorMessage = new OptionPaneStyle();
-                        errorMessage.showMessageDialog(null, "Please, can you fill all " +
-                                "the fields!", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        // Create a new constructor if any of the fields is empty
-                        createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
-                    }
-                    // Check if the email already exists, display an error message and create a new
-                    // constructor
-                    else if (mails.contains(constructor.getFieldsContent().get(0))) {
-                        OptionPaneStyle errorMessage = new OptionPaneStyle();
-                        errorMessage.showMessageDialog(null, "This email already exists!",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        // Create a new constructor if the email already exists
-                        createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
-                    }
-                    // Create a new participant with the provided information
-                    else {
-                        Role role = null;
-                        if (constructor.getComboBoxesContent().get(0).equals("Admin")) {
-                            role = Role.ADMIN;
-                        } else if (constructor.getComboBoxesContent().get(0).equals("Member")) {
-                            role = Role.MEMBER;
-                        } else if (constructor.getComboBoxesContent().get(0).equals("Observer")) {
-                            role = Role.OBSERVER;
+            // Check if the user entered a board name
+            if (boardNameObj != null) {
+                // Convert the object to a string and trim leading and trailing spaces
+                String boardName = boardNameObj.toString().trim();
+
+                // While the board name is empty, ask the user to enter a new one
+                while (boardName.isEmpty()) {
+                    // Display an error message indicating that the board name cannot be empty
+                    optionPaneStyle.showMessageDialog(null, "Board name cannot be empty!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+
+                    // Prompt the user to enter the board name again
+                    boardNameObj = optionPaneStyle.showInputDialog(null,
+                            "Enter the name of the new board:", "New board creation",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    // Convert the object to a string and trim leading and trailing spaces
+                    boardName = boardNameObj.toString().trim();
+                }
+
+                // Get the names of the existing boards
+                ArrayList<String> names = new ArrayList<String>();
+                for (Board board : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
+                        .getBoards()) {
+                    names.add(board.getName());
+                }
+
+                // While the board name already exists, ask the user to enter a new one
+                while (names.contains(boardName)) {
+                    // Display an error message indicating that the board name already exists
+                    optionPaneStyle.showMessageDialog(null, "Board name already exists!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+
+                    // Prompt the user to enter the board name again
+                    boardNameObj = optionPaneStyle.showInputDialog(null,
+                            "Enter the name of the new board:", "New board creation",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    // Convert the object to a string and trim leading and trailing spaces
+                    boardName = boardNameObj.toString().trim();
+                }
+
+                // Create the new board with the user-provided name
+                Board board = new Board(boardName);
+                TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).addBoard(board);
+
+                // Update the workspace info view and the workspace view
+                workspaceInfoView.update();
+                workspaceView.update();
+
+            }
+        }
+
+        /**
+         * This method creates a new ConstructorStyle object for the participant
+         * controller window.
+         * <p>
+         * It allows to create a new participant.
+         * </p>
+         *
+         * @param fields           the fields of the controller window
+         * @param comboBoxes       the combo boxes of the controller window
+         * @param comboBoxesLabels the labels of the combo boxes of the controller
+         *                         window
+         * @author Pierre Fromont Boissel
+         * @see ConstructorStyle
+         * @see trellolite.style
+         * @see java.awt.event.WindowAdapter
+         * @see java.awt.event.WindowEvent
+         * @see java.util.ArrayList
+         * @see java.lang.String
+         */
+        public void createNewParticipantController(ArrayList<String> fields, ArrayList<ComboBoxStyle> comboBoxes,
+                ArrayList<String> comboBoxesLabels) {
+            // Create a new ConstructorStyle object for the participant constructor
+            ConstructorStyle constructor = new ConstructorStyle("Add a participant",
+                    400, 300, fields, comboBoxes, comboBoxesLabels);
+
+            // Add a WindowListener to the constructor window
+            constructor.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    // Check if the constructor was not cancelled by the user
+                    if (!constructor.isCancelled()) {
+                        // Get the emails of the existing participants in the selected workspace
+                        ArrayList<String> mails = new ArrayList<>();
+                        for (Participant participant : TrelloMain.workspaceManager
+                                .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
+                            mails.add(participant.getMail());
                         }
 
-                        Participant newParticipant = new Participant(constructor.getFieldsContent().get(1),
-                                constructor.getFieldsContent().get(2),
-                                constructor.getFieldsContent().get(0), role);
+                        // Check if any of the fields is empty, display an error message and create a
+                        // new constructor
+                        if (constructor.getFieldsContent().get(0).equals("") ||
+                                constructor.getFieldsContent().get(1).equals("") ||
+                                constructor.getFieldsContent().get(2).equals("")) {
+                            OptionPaneStyle errorMessage = new OptionPaneStyle();
+                            errorMessage.showMessageDialog(null, "Please, can you fill all " +
+                                    "the fields!", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // Create a new constructor if any of the fields is empty
+                            createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
+                        }
+                        // Check if the email already exists, display an error message and create a new
+                        // constructor
+                        else if (mails.contains(constructor.getFieldsContent().get(0))) {
+                            OptionPaneStyle errorMessage = new OptionPaneStyle();
+                            errorMessage.showMessageDialog(null, "This email already exists!",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // Create a new constructor if the email already exists
+                            createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
+                        }
+                        // Create a new participant with the provided information
+                        else {
+                            Role role = null;
+                            if (constructor.getComboBoxesContent().get(0).equals("Admin")) {
+                                role = Role.ADMIN;
+                            } else if (constructor.getComboBoxesContent().get(0).equals("Member")) {
+                                role = Role.MEMBER;
+                            } else if (constructor.getComboBoxesContent().get(0).equals("Observer")) {
+                                role = Role.OBSERVER;
+                            }
 
-                        // Add the new participant to the workspace
-                        TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
-                                .addMember(newParticipant);
-                        // Update the info panel
-                        workspaceInfoView.update();
+                            Participant newParticipant = new Participant(constructor.getFieldsContent().get(1),
+                                    constructor.getFieldsContent().get(2),
+                                    constructor.getFieldsContent().get(0), role);
+
+                            // Add the new participant to the workspace
+                            TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
+                                    .addMember(newParticipant);
+                            // Update the info panel
+                            workspaceInfoView.update();
+                        }
                     }
                 }
+            });
+        }
+
+        private void removeMember(){
+            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+            Object memberMailObject = optionPaneStyle.showInputDialog(null,
+                "Enter the mail of the member", "Remove a Member",
+                JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+            if (memberMailObject != null) {
+                // Convert the object to a string and trim leading and trailing spaces
+                String memberMail = memberMailObject.toString().trim();
+
+                while (memberMail.isEmpty()) {
+                    // Display an error message indicating that the member mail already exists
+                    optionPaneStyle.showMessageDialog(null, "Enter mail ",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+
+                    memberMailObject = optionPaneStyle.showInputDialog(null, "Enter the mail of the member",
+                            "Remove a Member",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    memberMail = memberMailObject.toString().trim();
+                }
+
+                ArrayList<String> mails = new ArrayList<String>();
+                for (Participant member : TrelloMain.workspaceManager
+                        .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
+                    mails.add(member.getMail());
+                }
+
+                while (!mails.contains(memberMail)) {
+                    optionPaneStyle.showMessageDialog(null, "Member mail doesn't exists!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+
+                    memberMailObject = optionPaneStyle.showInputDialog(null, "Enter the mail of the member",
+                            "Remove a Member",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    memberMail = memberMailObject.toString().trim();
+                }
+
+                // Remove the member
+                Participant memberToRemove = null;
+                for (Participant member : TrelloMain.workspaceManager
+                        .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
+                    if (member.getMail().equals(memberMail)) {
+                        memberToRemove = member;
+                    }
+                }
+
+                TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
+                        .removeMember(memberToRemove);
+                
+                // Update the workspace info view
+                workspaceInfoView.update();
             }
-        });
+        }
     }
-}}
+}
