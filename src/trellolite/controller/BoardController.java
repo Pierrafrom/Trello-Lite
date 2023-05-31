@@ -1,5 +1,9 @@
 package trellolite.controller;
 
+// ---------------------------------------------------------------------------------------------------------------------
+// IMPORTS
+// ---------------------------------------------------------------------------------------------------------------------
+
 import trellolite.TrelloMain;
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -12,6 +16,7 @@ import trellolite.model.Workspace;
 import trellolite.style.ComboBoxStyle;
 import trellolite.style.OptionPaneStyle;
 import trellolite.view.BoardView;
+import trellolite.view.ManagerView;
 import trellolite.view.WorkspaceView;
 
 import java.awt.event.ActionEvent;
@@ -22,6 +27,12 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JOptionPane;
 
+/**
+ * This class is the controller of the Board class.
+ *
+ * @author Pierre Fromont Boissel
+ * @author Roxane Zaharia
+ */
 public class BoardController {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -52,17 +63,64 @@ public class BoardController {
     // LISTENERS
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Listener for the actionComboBox
+     *
+     * @author Pierre Fromont Boissel
+     * @author Augustin Lecomte
+     */
     private class ActionComboBoxListener implements ActionListener {
+
+        /**
+         * Action performed when the user selects an action in the actionComboBox
+         *
+         * @param e ,ActionEvent, the event
+         * @author Pierre Fromont Boissel
+         * @author Augustin Lecomte
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
+
+            // ---------------------------------------------------------------------------------------------------------
+            // CONSTANTS
+            // ---------------------------------------------------------------------------------------------------------
+
+            final int RENAME_BOARD = 0;
+            final int ADD_NEW_LIST = 1;
+            final int DELETE_BOARD = 2;
+
+            // Switch between the different actions of the actionComboBox
             switch (actionComboBox.getSelectedIndex()) {
-                case 0 -> {
+                case RENAME_BOARD -> {
+                    // Rename the Board
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+                    // Prompt the user to enter the new name of the board
+                    String message = "Enter the new name of the board:";
+                    String title = "Board name modification";
+                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null, message,title,
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                    String newName = ChangeBoardNameObj.toString().trim();
+
+                    // Rename the Board model only if the name is not empty
+                    // If the name is empty, it displays an error message
+                    if(newName.isEmpty()){
+                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name",
+                                "empty name", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    board.setName(newName);
+
+                    // update the Board view
+                    boardView.update(board);
+                }
+                case ADD_NEW_LIST -> {
                     // Add a new list
                     createNewList();
                 }
-                case 1 -> {
+                case DELETE_BOARD -> {
                     // Delete the Board
-                    // Ask for confirmation
+                    // Asking for confirmation before deleting the board
                     ConfirmationDialog dialogController = new ConfirmationDialog();
                     String message = "Are you sure you want to delete the board : " + board.getName() + " ?";
                     String title = "Confirmation";
@@ -77,24 +135,7 @@ public class BoardController {
                     }
 
                 }
-                case 2 -> {
-                    // Rename the Board
-                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 
-                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null,
-                            "Enter the new name of the board:", "Board name modification",
-                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
-                    String newName = ChangeBoardNameObj.toString().trim();
-                    // Rename the Board model
-                    if(newName.isEmpty()){
-                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name",
-                                                    "empty name", JOptionPane.ERROR_MESSAGE);
-                        break;
-                    }
-                    board.setName(newName);
-                    // update the Board view
-                    boardView.update(board);
-                }
             }
         }
 

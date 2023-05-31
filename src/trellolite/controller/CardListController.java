@@ -44,34 +44,57 @@ public class CardListController {
     // LISTENERS
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Listener for the actionComboBox
+     *
+     * @author Pierre Fromont Boissel
+     * @author Augustin Lecomte
+     */
     private class ActionComboBoxListener implements ActionListener {
+        /**
+         * Action performed when the user selects an action in the actionComboBox
+         *
+         * @param e ,ActionEvent, The event
+         * @author Pierre Fromont Boissel
+         * @author Augustin Lecomte
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
+
+            //--------------------------------------------------------------------------------------------------------------
+            // CONSTANTS
+            //--------------------------------------------------------------------------------------------------------------
+
+            final int CHANGE_NAME = 0;
+            final int ADD_CARD = 1;
+            final int DELETE_LIST = 2;
+
+            // Switch between the different actions of the actionComboBox
             switch (actionComboBox.getSelectedIndex()) {
-                case 0:
-                    // Change the name of the list
+                case CHANGE_NAME -> {
+                    // Changing the name of the cardList
                     OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                    String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
-                    if(newName.isEmpty()) {
-                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name", "empty name", JOptionPane.ERROR_MESSAGE);
+                    String newName = optionPaneStyle.showInputDialog("Enter the new name of the list");
+                    if (newName.isEmpty()) {
+                        String message = "Please, enter a valid name";
+                        String title = "Empty name";
+                        optionPaneStyle.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                     cardList.setName(newName);
                     cardListView.update(cardList);
 
-                    // Update the actionComboBox to match the new one create in the update
+                    // Update the actionComboBox to match the new one created during the update
                     actionComboBox = cardListView.getActionsComboBox();
                     actionComboBox.addActionListener(new ActionComboBoxListener());
-
-                    break;
-                case 1:
+                }
+                case ADD_CARD ->
                     // Add a new card
                     System.out.println("Add a new card");
                     // TODO: Add a new card
-                    break;
-                case 2:
-                    // Delete the list
-                    // Ask for confirmation
+                case DELETE_LIST -> {
+                    // Deleting the cardList
+                    // Asking for confirmation
                     ConfirmationDialog dialogController = new ConfirmationDialog();
                     String message = "Are you sure you want to delete the list : " + cardList.getName() + " ?";
                     String title = "Confirmation";
@@ -82,7 +105,7 @@ public class CardListController {
                         board.removeList(cardList);
                         boardView.update(board);
                     }
-                    break;
+                }
             }
         }
     }
