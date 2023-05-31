@@ -71,7 +71,7 @@ public class CardListController {
                     String title = "Confirmation";
                     boolean result = dialogController.showConfirmationDialog(message, title);
 
-                    // If the user select "Yes"
+                    // If the user selects "Yes"
                     if (result) {
                         board.removeList(cardList);
                         boardView.update(board);
