@@ -86,14 +86,18 @@ public class BoardView extends PanelStyle {
      */
     public void update(Board board) {
         this.board = board;
-        // remove the title Panel
-        topPanel.remove(0);
-        // Create the title Panel
-        topPanel.add(createTitlePanel(), BorderLayout.CENTER);
+        // Remove the title Panel
+        topPanel.remove(getComponent(0));
         // Remove the content Panel
-        remove(1);
+        remove(getComponent(1));
         // Create the content Panel
         createContentPanel();
+    
+        // Add the updated components back to the BoardView
+        topPanel.add(createTitlePanel(), BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
+        revalidate(); // Revalidate the panel to update the layout
+        repaint(); // Repaint the panel to reflect the changes
     }
 
     /**
