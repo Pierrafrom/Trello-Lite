@@ -558,6 +558,7 @@ public class ManagerController {
         private void removeMember(){
             OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 
+             // Prompt the user to enter the name of the new member
             Object memberMailObject = optionPaneStyle.showInputDialog(null,
                 "Enter the mail of the member", "Remove a Member",
                 JOptionPane.INFORMATION_MESSAGE, null, null, null);
@@ -565,12 +566,14 @@ public class ManagerController {
             if (memberMailObject != null) {
                 // Convert the object to a string and trim leading and trailing spaces
                 String memberMail = memberMailObject.toString().trim();
-
+                
+                // While the member mail is empty, ask the user to enter a new one
                 while (memberMail.isEmpty()) {
                     // Display an error message indicating that the member mail already exists
                     optionPaneStyle.showMessageDialog(null, "Enter mail ",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
+                     // Prompt the user to enter the name of the member to be deleted
                     memberMailObject = optionPaneStyle.showInputDialog(null, "Enter the mail of the member",
                             "Remove a Member",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
@@ -583,11 +586,11 @@ public class ManagerController {
                         .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
                     mails.add(member.getMail());
                 }
-
+                // While the member  doesn't exists, ask the user to enter a new one
                 while (!mails.contains(memberMail)) {
                     optionPaneStyle.showMessageDialog(null, "Member mail doesn't exists!",
                             "Error", JOptionPane.ERROR_MESSAGE);
-
+                    // Prompt the user to enter the name of the new board
                     memberMailObject = optionPaneStyle.showInputDialog(null, "Enter the mail of the member",
                             "Remove a Member",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
