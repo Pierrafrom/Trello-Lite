@@ -83,7 +83,8 @@ public class BoardController {
                     // Rename the Board
                         System.out.println("Rename the Board");
                 // TODO: Rename the Board
-                Object ChangeBoardNameObj = OptionPaneStyle.showInputDialog(null,
+                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null,
                     "Enter the new name of the board:", "Board name modification",
                     JOptionPane.INFORMATION_MESSAGE, null, null, null);
                 String newName = ChangeBoardNameObj.toString().trim();
