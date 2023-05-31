@@ -30,7 +30,7 @@ import java.awt.*;
  */
 public class BoardView extends PanelStyle {
 
-    private final String[] actions = { "Add a list", "Delete the board", "Change the name of the board" };
+    private final String[] actions = { "Change the name of the board", "Add a list", "Delete the board" };
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------

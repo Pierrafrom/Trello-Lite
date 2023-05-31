@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
  *
  * @author Pierre Fromont Boissel
  * @author Roxane Zaharia
+ * @author Augustin Lecomte
  */
 public class BoardController {
 
@@ -93,20 +94,32 @@ public class BoardController {
             switch (actionComboBox.getSelectedIndex()) {
                 case RENAME_BOARD -> {
                     // Rename the Board
-                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+                    // Instantiate the variables
+                    boolean empty = false;
+                    boolean used = false;
+                    String alert;
+                    String titleAlert = "Invalid name";
 
                     // Prompt the user to enter the new name of the board
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
                     String message = "Enter the new name of the board:";
                     String title = "Board name modification";
                     Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null, message,title,
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
                     String newName = ChangeBoardNameObj.toString().trim();
 
-                    // Rename the Board model only if the name is not empty
-                    // If the name is empty, it displays an error message
-                    if(newName.isEmpty()){
-                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name",
-                                "empty name", JOptionPane.ERROR_MESSAGE);
+                    // Rename the Board model only if the name is not empty and unique in the workspace
+                    // Else, it displays an error message
+                    empty = newName.isEmpty();
+                    used = isNameUsed(newName);
+                    if(empty || used){
+                        if(empty) alert = "The name cannot be empty";
+                        else alert = "The name is already used";
+
+                        optionPaneStyle.showMessageDialog(null, alert, titleAlert,
+                                                          JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                     board.setName(newName);
@@ -133,9 +146,7 @@ public class BoardController {
                         workspaceView.update();
                         // update the Workspace view
                     }
-
                 }
-
             }
         }
 
@@ -207,6 +218,22 @@ public class BoardController {
                 board.addList(list);
                 boardView.update(board);
             }
+        }
+
+        /**
+         * Check if the name is already used in the board
+         *
+         * @param name ,String, The name to check
+         * @return boolean, True if the name is already used, false otherwise
+         * @author Augustin Lecomte
+         */
+        private boolean isNameUsed(String name) {
+            for (Board board : workspace.getBoards()) {
+                if (board.getName().equals(name)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

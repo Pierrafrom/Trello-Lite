@@ -1,5 +1,9 @@
 package trellolite.controller;
 
+// ---------------------------------------------------------------------------------------------------------------------
+// IMPORTS
+// ---------------------------------------------------------------------------------------------------------------------
+
 import trellolite.model.Board;
 import trellolite.model.CardList;
 import trellolite.style.ComboBoxStyle;
@@ -12,6 +16,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+/**
+ * This class is the controller of the Board class.
+ *
+ * @author Augustin Lecomte
+ * @author Pierre Fromont Boissel
+ */
 public class CardListController {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -29,6 +39,18 @@ public class CardListController {
     // CONSTRUCTOR
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * Constructor of the BoardController class.
+     *
+     * @param board ,Board, The board
+     * @param cardList ,CardList, The card list
+     * @param boardView ,BoardView, The board view
+     * @param cardListView ,CardListView, The card list view
+     * @see trellolite.model.Board
+     * @see trellolite.model.CardList
+     * @see trellolite.view.BoardView
+     * @see trellolite.view.CardListView
+     */
     public CardListController(Board board, CardList cardList, BoardView boardView, CardListView cardListView) {
 
         this.board = board;
@@ -73,12 +95,29 @@ public class CardListController {
             switch (actionComboBox.getSelectedIndex()) {
                 case CHANGE_NAME -> {
                     // Changing the name of the cardList
+
+                    // Instantiate the variables
+                    boolean empty = false;
+                    boolean used = false;
+                    String alert;
+                    String titleAlert = "Invalid name";
+
                     OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                     String newName = optionPaneStyle.showInputDialog("Enter the new name of the list");
-                    if (newName.isEmpty()) {
+
+                    empty = newName.isEmpty();
+                    used = isNameUsed(newName);
+
+                    // Rename the CardList model only if the name is not empty and unique in the board
+                    // Else, it displays an error message
+                    if (empty || used) {
+                        if(empty) alert = "The name cannot be empty";
+                        else alert = "The name is already used in this board";
                         String message = "Please, enter a valid name";
                         String title = "Empty name";
-                        optionPaneStyle.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+
+                        optionPaneStyle.showMessageDialog(null, alert, titleAlert,
+                                                          JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                     cardList.setName(newName);
@@ -107,6 +146,22 @@ public class CardListController {
                     }
                 }
             }
+        }
+
+        /**
+         * Check if the name is already used in the board
+         *
+         * @param name ,String, The name to check
+         * @return boolean, True if the name is already used, false otherwise
+         * @author Augustin Lecomte
+         */
+        private boolean isNameUsed(String name) {
+            for (CardList list : board.getLists()) {
+                if (list.getName().equals(name)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
