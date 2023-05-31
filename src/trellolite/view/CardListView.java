@@ -108,11 +108,12 @@ public class CardListView extends PanelStyle {
      * @see javax.swing.JScrollPane
      */
     public void update(CardList cardList) {
+
         this.cardList = cardList;
         // update top panel
         LabelStyle listName = new LabelStyle(cardList.getName(), TextType.SUBTITLE, SwingConstants.CENTER);
         remove(0);
-        add(listName, BorderLayout.CENTER, 0);
+        add(createTopPanel(), BorderLayout.NORTH, 0);
         // update content panel
         remove(1);
         add(createContentPanel(), BorderLayout.CENTER, 1);

@@ -3,11 +3,14 @@ package trellolite.controller;
 import trellolite.model.Board;
 import trellolite.model.CardList;
 import trellolite.style.ComboBoxStyle;
+import trellolite.style.OptionPaneStyle;
 import trellolite.view.BoardView;
 import trellolite.view.CardListView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.text.html.Option;
 
 public class CardListController {
 
@@ -51,10 +54,16 @@ public class CardListController {
                     // TODO: Change the name of the list
                     // change the name of the list model
                     // update the view
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                    String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
+                    cardList.setName(newName);
+                    cardListView.update(cardList);
+                    break;
                 case 1:
                     // Add a new card
                     System.out.println("Add a new card");
                     // TODO: Add a new card
+                    break;
                 case 2:
                     // Delete the list
                     // Ask for confirmation
@@ -70,6 +79,7 @@ public class CardListController {
                         // update the Board view
                         System.out.println("Delete the List");
                     }
+                    break;
             }
         }
     }
