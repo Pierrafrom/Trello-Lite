@@ -70,28 +70,23 @@ public class BoardController {
 
                     // If the user selected "Yes"
                     if (result) {
-                        // TODO: Delete the Board
                         // Delete the Board model from the Workspace model
+                        workspace.removeBoard(board);
+                        workspaceView.update();
                         // update the Workspace view
-                        workspace.getBoards().remove(board);
-                        boardView.update(board);
-                        System.out.println("Delete the Board");
                     }
                     
                 }
                 case 2 ->{
                     // Rename the Board
-                        System.out.println("Rename the Board");
-                // TODO: Rename the Board
                 Object ChangeBoardNameObj = OptionPaneStyle.showInputDialog(null,
                     "Enter the new name of the board:", "Board name modification",
                     JOptionPane.INFORMATION_MESSAGE, null, null, null);
                 String newName = ChangeBoardNameObj.toString().trim();
-                board.setName(newName);
                 // Rename the Board model
-                System.out.println(board.getName());
+                board.setName(newName);
                 // update the Board view
-                boardView.update(board);
+                workspaceView.update();
                 }
             }
         }
