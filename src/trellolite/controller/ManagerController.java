@@ -362,7 +362,8 @@ public class ManagerController {
                     createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
                 }
                 case 2 -> {
-                    
+                    // Remove a Member
+                    removeMember();
                 }
 
                 case 3 -> {
