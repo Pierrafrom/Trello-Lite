@@ -5,6 +5,7 @@ package trellolite.controller;
 // ---------------------------------------------------------------------------------------------------------------------
 
 import trellolite.TrelloMain;
+import trellolite.model.Board;
 import trellolite.model.Participant;
 import trellolite.model.Role;
 import trellolite.model.Workspace;
@@ -366,10 +367,82 @@ public class ManagerController {
                 }
                 case 3 -> {
                     // Add a Board
-                    System.out.println("Add a Board");
-
-                    // TODO: Add a Board
+                    createNewBoard();
                 }
+            }
+        }
+
+        /**
+         * This method creates a new board and adds it to the selected workspace.
+         * <p>
+         * It prompts the user to enter the name of the new board.
+         * Then it creates a new board and adds it to the selected workspace.
+         * </p>
+         * 
+         * @author Pierre Fromont Boissel
+         * @see ManagerView
+         * @see trellolite.model
+         * @see trellolite.style
+         * @see javax.swing.JOptionPane
+         */
+        private void createNewBoard(){
+            // Create a new OptionPaneStyle object to display dialogs with the same style
+            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+            // Prompt the user to enter the name of the new board
+            Object boardNameObj = optionPaneStyle.showInputDialog(null,
+                    "Enter the name of the new Board:", "New Board creation",
+                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+            // Check if the user entered a board name
+            if (boardNameObj != null) {
+                // Convert the object to a string and trim leading and trailing spaces
+                String boardName = boardNameObj.toString().trim();
+
+                // While the board name is empty, ask the user to enter a new one
+                while (boardName.isEmpty()) {
+                    // Display an error message indicating that the board name cannot be empty
+                    optionPaneStyle.showMessageDialog(null, "Board name cannot be empty!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+
+                    // Prompt the user to enter the board name again
+                    boardNameObj = optionPaneStyle.showInputDialog(null,
+                            "Enter the name of the new board:", "New board creation",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    // Convert the object to a string and trim leading and trailing spaces
+                    boardName = boardNameObj.toString().trim();
+                }
+
+                // Get the names of the existing boards
+                ArrayList<String> names = new ArrayList<String>();
+                for (Board board : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getBoards()) {
+                    names.add(board.getName());
+                }
+
+                // While the board name already exists, ask the user to enter a new one
+                while (names.contains(boardName)) {
+                    // Display an error message indicating that the board name already exists
+                    optionPaneStyle.showMessageDialog(null, "Board name already exists!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+
+                    // Prompt the user to enter the board name again
+                    boardNameObj = optionPaneStyle.showInputDialog(null,
+                            "Enter the name of the new board:", "New board creation",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    // Convert the object to a string and trim leading and trailing spaces
+                    boardName = boardNameObj.toString().trim();
+                }
+
+                // Create the new board with the user-provided name
+                Board board = new Board(boardName);
+                TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).addBoard(board);
+
+                // Update the workspace info view and the workspace view
+                workspaceInfoView.update();
+                workspaceView.update();
+
             }
         }
 
