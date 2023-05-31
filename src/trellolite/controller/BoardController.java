@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import javax.swing.JOptionPane;
+
 public class BoardController {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -54,9 +56,10 @@ public class BoardController {
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (actionComboBox.getSelectedIndex()) {
-                case 0 ->
+                case 0 -> {
                     // Add a new list
-                        createNewList();
+                    createNewList();
+                }
                 case 1 -> {
                     // Delete the Board
                     // Ask for confirmation
@@ -67,19 +70,26 @@ public class BoardController {
 
                     // If the user selected "Yes"
                     if (result) {
-                        // TODO: Delete the Board
                         // Delete the Board model from the Workspace model
+                        workspace.removeBoard(board);
+                        workspaceView.update();
                         // update the Workspace view
-                        System.out.println("Delete the Board");
                     }
-                }
-                case 2 ->
-                    // Rename the Board
-                        System.out.println("Rename the Board");
 
-                // TODO: Rename the Board
-                // Rename the Board model
-                // update the Board view
+                }
+                case 2 -> {
+                    // Rename the Board
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null,
+                            "Enter the new name of the board:", "Board name modification",
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                    String newName = ChangeBoardNameObj.toString().trim();
+                    // Rename the Board model
+                    board.setName(newName);
+                    // update the Board view
+                    boardView.update(board);
+                }
             }
         }
 
@@ -96,7 +106,7 @@ public class BoardController {
          * @see trellolite.style
          * @see javax.swing.JOptionPane
          */
-        private void createNewList(){
+        private void createNewList() {
             // Create a new OptionPaneStyle object to display dialogs with the same style
             OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 

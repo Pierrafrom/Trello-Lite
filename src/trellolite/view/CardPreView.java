@@ -4,7 +4,6 @@ package trellolite.view;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
-import trellolite.controller.OpenCardController;
 import trellolite.model.Card;
 import trellolite.style.ButtonStyle;
 import trellolite.style.LabelStyle;
