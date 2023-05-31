@@ -52,6 +52,11 @@ public class CardListController {
                     String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
                     cardList.setName(newName);
                     cardListView.update(cardList);
+
+                    // Update the actionComboBox to match the new one create in the update
+                    actionComboBox = cardListView.getActionsComboBox();
+                    actionComboBox.addActionListener(new ActionComboBoxListener());
+
                     break;
                 case 1:
                     // Add a new card
@@ -70,12 +75,9 @@ public class CardListController {
                     if (result) {
                         board.removeList(cardList);
                         boardView.update(board);
-                        System.out.println("Delete the List");
                     }
                     break;
             }
-            actionComboBox = cardListView.getActionsComboBox();
-            actionComboBox.addActionListener(new ActionComboBoxListener());
         }
     }
 }
