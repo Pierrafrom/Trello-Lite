@@ -14,6 +14,7 @@ import trellolite.view.CardListView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -127,13 +128,13 @@ public class CardListController {
                     actionComboBox = cardListView.getActionsComboBox();
                     actionComboBox.addActionListener(new ActionComboBoxListener());
                 }
-                case ADD_CARD ->
+                case ADD_CARD -> {
                     // Add a new card
-                    System.out.println("Add a new card");
-                    // TODO: Add a new card
+                    createNewCard();
+                }
                 case DELETE_LIST -> {
-                    // Deleting the cardList
-                    // Asking for confirmation
+                    // Delete the list
+                    // Ask for confirmation
                     ConfirmationDialog dialogController = new ConfirmationDialog();
                     String message = "Are you sure you want to delete the list : " + cardList.getName() + " ?";
                     String title = "Confirmation";
@@ -163,5 +164,15 @@ public class CardListController {
             }
             return false;
         }
+
+        private void createNewCard() {
+            // create the frame for the new card creation
+            JFrame frame = new JFrame("New card");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setSize(300, 200);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        }
     }
+    
 }
