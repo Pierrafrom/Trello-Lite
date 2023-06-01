@@ -56,6 +56,7 @@ public class CardList implements Serializable {
     private String name;
     private boolean archived;
     private ArrayList<Card> cards;
+    private ArrayList<Card> cardsArchived;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -96,6 +97,7 @@ public class CardList implements Serializable {
         this.name = name;
         this.archived = false;
         cards = new ArrayList<>();
+        cardsArchived = new ArrayList<>();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -106,7 +108,7 @@ public class CardList implements Serializable {
      * Getter for the id.
      *
      * @return int, the id of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      */
     public int getId() {
         return id;
@@ -116,7 +118,7 @@ public class CardList implements Serializable {
      * Getter for the name.
      *
      * @return String, the name of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      * @see String
      */
     public String getName() {
@@ -127,7 +129,7 @@ public class CardList implements Serializable {
      * Getter for the archived status.
      *
      * @return boolean, the archived status of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      */
     public boolean getArchived() {
         return archived;
@@ -137,12 +139,23 @@ public class CardList implements Serializable {
      * Getter for the cards.
      *
      * @return ArrayList<Card>, the cards of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      * @see ArrayList
      * @see Card
      */
     public ArrayList<Card> getCards() {
         return cards;
+    }
+
+      /**
+     * Getter for the archived cards
+     * 
+     * @return ArrayList<Card>, the archived cards of the list
+     * @see ArrayList
+     * @see Card
+     */
+    public ArrayList<Card> getCardsArchived(){
+        return cardsArchived;
     }
 
     /**
@@ -157,12 +170,24 @@ public class CardList implements Serializable {
         return cards.get(index);
     }
 
+     /**
+     * Getter for the cardarchived  at the given index.
+     *
+     * @param index ,int, the index of the card.
+     * @return Card, the card at the given index of the list of cards of the list.
+     * @author Roxane Zaharia
+     * @see Card
+     */
+    public Card getCardArchived(int index) {
+        return cardsArchived.get(index);
+    }
+
     /**
      * Setter for the name.
      * Sets the name of the list with the given name.
      *
      * @param name ,String, the name of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      * @see String
      */
     public void setName(String name) {
@@ -174,7 +199,7 @@ public class CardList implements Serializable {
      * Sets the archived status of the list with the given archived status.
      *
      * @param archived ,boolean, the archived status of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      */
     public void setArchived(boolean archived) {
         this.archived = archived;
@@ -185,7 +210,7 @@ public class CardList implements Serializable {
      * Sets the cards of the list with the given cards.
      *
      * @param cards ,ArrayList<Card>, the cards of the list.
-     * @author Roxanne Zaharia
+     * @author Roxane Zaharia
      * @see ArrayList
      * @see Card
      */
@@ -209,6 +234,18 @@ public class CardList implements Serializable {
         cards.add(card);
     }
 
+     /**
+     * This method adds a card to the list at the end of the list.
+     *
+     * @param card ,Card, the card to add to the list of cards archived.
+     * @author Roxane Zaharia
+     * @see Card
+     * @see ArrayList
+     */
+    public void addCardArchived(Card card) {
+        cardsArchived.add(card);
+    }
+
     /**
      * This method removes a card from the list.
      *
@@ -220,4 +257,6 @@ public class CardList implements Serializable {
     public void removeCard(Card card) {
         cards.remove(card);
     }
+
+  
 }

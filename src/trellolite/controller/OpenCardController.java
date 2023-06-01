@@ -7,6 +7,7 @@ package trellolite.controller;
 import trellolite.model.Card;
 import trellolite.model.CardList;
 import trellolite.style.ButtonStyle;
+import trellolite.view.CardArchivedView;
 import trellolite.view.CardListView;
 import trellolite.view.CardPreView;
 import trellolite.view.FullCardView;
