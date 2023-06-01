@@ -64,12 +64,12 @@ public class CardArchivedView extends JFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
 
-    public static void main(String[] args) {
+    /**public static void main(String[] args) {
         CardList cl = new CardList("test");
         Card c = new Card("card1");
         c.setArchived(true);
         cl.addCardArchived(c);
         System.out.println(cl.getCardsArchived().size());
         CardArchivedView v = new CardArchivedView(cl);
-    }
+    }*/
 }
