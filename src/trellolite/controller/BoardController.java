@@ -52,8 +52,18 @@ public class BoardController {
     // LISTENERS
     // -----------------------------------------------------------------------------------------------------------------
 
+  
     private class ActionComboBoxListener implements ActionListener {
         @Override
+    /**
+     * this method allows the users to chose between 3 options in order to modify the selected board:
+     case0->create a new list case1-> delete the board and case2 -> change the name of the board
+     * 
+     * @param ActionEvent e
+     * @author Pierre Fromont Boissel, Roxane ZAHARIA 
+     * @see trellolite.model
+     * @see trellolite.style
+     */
         public void actionPerformed(ActionEvent e) {
             switch (actionComboBox.getSelectedIndex()) {
                 case 0 -> {
