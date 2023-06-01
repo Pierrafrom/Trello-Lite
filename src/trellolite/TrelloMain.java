@@ -4,13 +4,10 @@ package trellolite;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
-import trellolite.controller.ManagerController;
-import trellolite.model.WorkspaceManager;
-import trellolite.style.MyStyle;
-import trellolite.style.PanelStyle;
-import trellolite.view.ManagerView;
-import trellolite.view.WorkspaceInfoView;
-import trellolite.view.WorkspaceView;
+import trellolite.controller.*;
+import trellolite.model.*;
+import trellolite.style.*;
+import trellolite.view.*;
 
 import javax.swing.*;
 import java.awt.*;
