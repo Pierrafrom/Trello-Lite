@@ -5,6 +5,7 @@ package trellolite.view;
 // ---------------------------------------------------------------------------------------------------------------------
 
 import javax.swing.*;
+
 import java.awt.*;
 
 import trellolite.style.*;
@@ -12,6 +13,7 @@ import trellolite.style.*;
 /**
  * LoginView class
  * This class represents the login view of the Trello-Lite application.
+ * Extends JFrame.
  * The login view is composed of:
  * <ul>
  *     <li>the title</li>
@@ -55,6 +57,17 @@ public class LoginView extends JFrame{
 
     private final int WIDTH = 500;
     private final int HEIGHT = 450;
+
+    ButtonStyle loginButton;
+    ButtonStyle signupButton;
+
+    TextField mailLoginTextField;
+    TextField passwordLoginTextField;
+
+    TextField firstNameTextField;
+    TextField lastNameTextField;
+    TextField mailSignupTextField;
+    TextField passwordSignupTextField;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTOR
@@ -178,7 +191,7 @@ public class LoginView extends JFrame{
         gbc.gridy = 0;
         centerPanel.add(mailLoginLabel, gbc);
 
-        TextField mailLoginTextField = new TextField();
+        mailLoginTextField = new TextField();
         mailLoginTextField.setPreferredSize(new Dimension(415, 30));
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -187,26 +200,26 @@ public class LoginView extends JFrame{
         centerPanel.add(mailLoginTextField, gbc);
 
         // Create the password label and text field and add them to the center panel.
-        LabelStyle passwordMailLabel = new LabelStyle("Password", TextType.TEXT, SwingConstants.CENTER);
+        LabelStyle passwordLoginLabel = new LabelStyle("Password", TextType.TEXT, SwingConstants.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.CENTER;
-        centerPanel.add(passwordMailLabel, gbc);
+        centerPanel.add(passwordLoginLabel, gbc);
 
-        TextField passwordMailTextField = new TextField();
-        passwordMailTextField.setPreferredSize(new Dimension(415, 30));
+        passwordLoginTextField = new TextField();
+        passwordLoginTextField.setPreferredSize(new Dimension(415, 30));
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 4;
         gbc.anchor = GridBagConstraints.WEST;
-        centerPanel.add(passwordMailTextField, gbc);
+        centerPanel.add(passwordLoginTextField, gbc);
 
         // Create the login button through a panel and add it to the center panel.
         PanelStyle loginPanel = new PanelStyle(WIDTH, 50, new FlowLayout());
         loginPanel.setBackground(MyStyle.BACKGROUND_COLOR);
 
-        ButtonStyle loginButton = new ButtonStyle("Login", 100, 30);
+        loginButton = new ButtonStyle("Login", 100, 30);
         loginButton.setBackground(MyStyle.BUTTON_COLOR);
         loginButton.setBorder(BorderFactory.createLineBorder(MyStyle.BUTTON_BORDER_COLOR));
         loginButton.setForeground(MyStyle.TEXT_COLOR);
@@ -296,7 +309,7 @@ public class LoginView extends JFrame{
         gbc.gridwidth = 1;
         centerPanel.add(firstNameLabel, gbc);
 
-        TextField firstNameTextField = new TextField();
+        firstNameTextField = new TextField();
         firstNameTextField.setPreferredSize(new Dimension(145, 30));
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -312,7 +325,7 @@ public class LoginView extends JFrame{
         gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(lastNameLabel, gbc);
 
-        TextField lastNameTextField = new TextField();
+        lastNameTextField = new TextField();
         lastNameTextField.setPreferredSize(new Dimension(145, 30));
         gbc.gridx = 4;
         gbc.gridy = 4;
@@ -327,7 +340,7 @@ public class LoginView extends JFrame{
         gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(mailSignupLabel, gbc);
 
-        TextField mailSignupTextField = new TextField();
+        mailSignupTextField = new TextField();
         mailSignupTextField.setPreferredSize(new Dimension(415, 30));
         gbc.gridx = 1;
         gbc.gridy = 5;
@@ -343,7 +356,7 @@ public class LoginView extends JFrame{
         gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(passwordSignupLabel, gbc);
 
-        TextField passwordSignupTextField = new TextField();
+        passwordSignupTextField = new TextField();
         passwordSignupTextField.setPreferredSize(new Dimension(415, 30));
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -355,7 +368,7 @@ public class LoginView extends JFrame{
         PanelStyle signupPanel = new PanelStyle(WIDTH, 50, new FlowLayout());
         signupPanel.setBackground(MyStyle.BACKGROUND_COLOR);
 
-        ButtonStyle signupButton = new ButtonStyle("Signup", 100, 30);
+        signupButton = new ButtonStyle("Signup", 100, 30);
         signupButton.setBackground(MyStyle.BUTTON_COLOR);
         signupButton.setBorder(BorderFactory.createLineBorder(MyStyle.BUTTON_BORDER_COLOR));
         signupButton.setForeground(MyStyle.TEXT_COLOR);
@@ -367,7 +380,27 @@ public class LoginView extends JFrame{
         centerPanel.add(signupPanel, gbc);
     }
 
-    public static void main (String[] args) {
-        LoginView loginView = new LoginView();
-    } 
+    public ButtonStyle getLoginButton() {
+        return loginButton;
+    }
+
+    public ButtonStyle getSignupButton() {
+        return signupButton;
+    }
+
+    public TextField[] getLoginTextFields() {
+        TextField[] loginTextFields = new TextField[2];
+        loginTextFields[0] = mailLoginTextField;
+        loginTextFields[1] = passwordLoginTextField;
+        return loginTextFields;
+    }
+
+    public TextField[] getSignupTextFields() {
+        TextField[] signupTextFields = new TextField[4];
+        signupTextFields[0] = firstNameTextField;
+        signupTextFields[1] = lastNameTextField;
+        signupTextFields[2] = mailSignupTextField;
+        signupTextFields[3] = passwordSignupTextField;
+        return signupTextFields;
+    }
 }

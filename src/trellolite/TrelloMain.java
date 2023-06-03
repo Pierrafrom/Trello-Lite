@@ -44,6 +44,7 @@ public class TrelloMain {
     // -----------------------------------------------------------------------------------------------------------------
     public static WorkspaceManager workspaceManager = new WorkspaceManager();
     public static int selectedWorkspaceIndex = 0;
+    public static Participant currentParticipant;
 
     // -----------------------------------------------------------------------------------------------------------------
     // METHODS
@@ -143,68 +144,76 @@ public class TrelloMain {
             workspaceManager = new WorkspaceManager();
         }
 
+        LoginView loginView = new LoginView();
+        LoginController loginController = new LoginController(loginView, workspaceManager);
+        
         // -------------------------------------------------------------------------------------------------------------
-        // CREATE THE MAIN FRAME
+        // CREATE THE MAIN FRAME AFTER LOGING IN
         // -------------------------------------------------------------------------------------------------------------
-        SwingUtilities.invokeLater(() -> {
-            // Create a new JFrame, set its title to "Trello-Lite", set its size to 1200x700, set its default close
-            // operation to JFrame.EXIT_ON_CLOSE, set its location to the center of the screen, and make it visible.
-            JFrame mainFrame = new JFrame("Trello-Lite");
-            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            mainFrame.setSize(1200, 700);
-            mainFrame.setLocationRelativeTo(null);
-            mainFrame.setVisible(true);
-            mainFrame.setMinimumSize(new Dimension(650, 680));
-            mainFrame.setLayout(new BorderLayout());
+        loginView.addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                SwingUtilities.invokeLater(() -> {     
 
-            // ---------------------------------------------------------------------------------------------------------
-            // LEFT PANEL
-            // ---------------------------------------------------------------------------------------------------------
-
-            // Create the left panel, set its size to 250x700, and set its layout to FlowLayout.
-            PanelStyle leftPanel = new PanelStyle(250, 700, new FlowLayout());
-            ((FlowLayout) leftPanel.getLayout()).setHgap(5);
-            ((FlowLayout) leftPanel.getLayout()).setVgap(5);
-            leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, MyStyle.BORDER_COLOR));
-
-            // Add the workspaceInfoView and the managerView to the left panel.
-            WorkspaceInfoView workspaceInfoView = new WorkspaceInfoView();
-            leftPanel.add(workspaceInfoView);
-            ManagerView managerView = new ManagerView();
-            leftPanel.add(managerView);
-
-            // Add the left panel to the main panel.
-            mainFrame.add(leftPanel, BorderLayout.WEST);
-
-            // ---------------------------------------------------------------------------------------------------------
-            // RIGHT PANEL
-            // ---------------------------------------------------------------------------------------------------------
-
-            // create the workspaceView
-            WorkspaceView workspaceView = new WorkspaceView(workspaceManager.getWorkspace(selectedWorkspaceIndex));
-
-            // add the workspaceView to the main panel
-            mainFrame.add(workspaceView, BorderLayout.CENTER);
-
-            // ---------------------------------------------------------------------------------------------------------
-            // ADD CONTROLLERS
-            // ---------------------------------------------------------------------------------------------------------
-            new ManagerController(managerView, workspaceView, workspaceInfoView);
-
-            /*
-             * To simplify the code we add the other controllers in the constructor of the View.
-             * This avoids to create a new controller for each view.
-             */
-
-            // ---------------------------------------------------------------------------------------------------------
-            // SAVE DATA
-            // ---------------------------------------------------------------------------------------------------------
-            mainFrame.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    // Call the saveData function to serialize and save the data
-                    saveData(workspaceManager);
-                }
-            });
-        });
+                    // Create a new JFrame, set its title to "Trello-Lite", set its size to 1200x700, set its default close
+                    // operation to JFrame.EXIT_ON_CLOSE, set its location to the center of the screen, and make it visible.
+                    JFrame mainFrame = new JFrame("Trello-Lite");
+                    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    mainFrame.setSize(1200, 700);
+                    mainFrame.setLocationRelativeTo(null);
+                    mainFrame.setVisible(true);
+                    mainFrame.setMinimumSize(new Dimension(650, 680));
+                    mainFrame.setLayout(new BorderLayout());
+        
+                    // ---------------------------------------------------------------------------------------------------------
+                    // LEFT PANEL
+                    // ---------------------------------------------------------------------------------------------------------
+        
+                    // Create the left panel, set its size to 250x700, and set its layout to FlowLayout.
+                    PanelStyle leftPanel = new PanelStyle(250, 700, new FlowLayout());
+                    ((FlowLayout) leftPanel.getLayout()).setHgap(5);
+                    ((FlowLayout) leftPanel.getLayout()).setVgap(5);
+                    leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, MyStyle.BORDER_COLOR));
+        
+                    // Add the workspaceInfoView and the managerView to the left panel.
+                    WorkspaceInfoView workspaceInfoView = new WorkspaceInfoView();
+                    leftPanel.add(workspaceInfoView);
+                    ManagerView managerView = new ManagerView();
+                    leftPanel.add(managerView);
+        
+                    // Add the left panel to the main panel.
+                    mainFrame.add(leftPanel, BorderLayout.WEST);
+        
+                    // ---------------------------------------------------------------------------------------------------------
+                    // RIGHT PANEL
+                    // ---------------------------------------------------------------------------------------------------------
+        
+                    // create the workspaceView
+                    WorkspaceView workspaceView = new WorkspaceView(workspaceManager.getWorkspace(selectedWorkspaceIndex));
+        
+                    // add the workspaceView to the main panel
+                    mainFrame.add(workspaceView, BorderLayout.CENTER);
+        
+                    // ---------------------------------------------------------------------------------------------------------
+                    // ADD CONTROLLERS
+                    // ---------------------------------------------------------------------------------------------------------
+                    new ManagerController(managerView, workspaceView, workspaceInfoView);
+        
+                    /*
+                     * To simplify the code we add the other controllers in the constructor of the View.
+                     * This avoids to create a new controller for each view.
+                     */
+        
+                    // ---------------------------------------------------------------------------------------------------------
+                    // SAVE DATA
+                    // ---------------------------------------------------------------------------------------------------------
+                    mainFrame.addWindowListener(new WindowAdapter() {
+                        public void windowClosing(WindowEvent e) {
+                            // Call the saveData function to serialize and save the data
+                            saveData(workspaceManager);
+                        }
+                    });
+                });
+            }
+        });        
     }
 }
