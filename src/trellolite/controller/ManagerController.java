@@ -345,7 +345,7 @@ public class ManagerController {
                     fields.add("email :");
                     fields.add("first name :");
                     fields.add("last name :");
-
+                    fields.add("password :");
                     // Combo boxes
                     ArrayList<ComboBoxStyle> comboBoxes = new ArrayList<>();
                     String[] Roles = {"Member", "Admin", "Observer"};

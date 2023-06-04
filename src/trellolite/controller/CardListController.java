@@ -51,9 +51,9 @@ public class CardListController {
     /**
      * Constructor of the BoardController class.
      *
-     * @param board ,Board, The board
-     * @param cardList ,CardList, The card list
-     * @param boardView ,BoardView, The board view
+     * @param board        ,Board, The board
+     * @param cardList     ,CardList, The card list
+     * @param boardView    ,BoardView, The board view
      * @param cardListView ,CardListView, The card list view
      * @see trellolite.model.Board
      * @see trellolite.model.CardList
@@ -92,9 +92,9 @@ public class CardListController {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            //--------------------------------------------------------------------------------------------------------------
+            // --------------------------------------------------------------------------------------------------------------
             // CONSTANTS
-            //--------------------------------------------------------------------------------------------------------------
+            // --------------------------------------------------------------------------------------------------------------
 
             final int CHANGE_NAME = 0;
             final int ADD_CARD = 1;
@@ -117,16 +117,19 @@ public class CardListController {
                     empty = newName.isEmpty();
                     used = isNameUsed(newName);
 
-                    // Rename the CardList model only if the name is not empty and unique in the board
+                    // Rename the CardList model only if the name is not empty and unique in the
+                    // board
                     // Else, it displays an error message
                     if (empty || used) {
-                        if(empty) alert = "The name cannot be empty";
-                        else alert = "The name is already used in this board";
+                        if (empty)
+                            alert = "The name cannot be empty";
+                        else
+                            alert = "The name is already used in this board";
                         String message = "Please, enter a valid name";
                         String title = "Empty name";
 
                         optionPaneStyle.showMessageDialog(null, alert, titleAlert,
-                                                          JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                     cardList.setName(newName);
@@ -138,7 +141,7 @@ public class CardListController {
                 }
                 case ADD_CARD -> {
                     // Add a new card
-                    createNewCard();
+                    createCardCreator();
                 }
                 case DELETE_LIST -> {
                     // Delete the list
@@ -157,6 +160,10 @@ public class CardListController {
             }
         }
 
+        // -----------------------------------------------------------------------------------------------------------------
+        // METHODS
+        // -----------------------------------------------------------------------------------------------------------------
+
         /**
          * Check if the name is already used in the board
          *
@@ -173,14 +180,77 @@ public class CardListController {
             return false;
         }
 
-        private void createNewCard() {
-            // create the frame for the new card creation
-            JFrame frame = new JFrame("New card");
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setSize(300, 200);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+        private void createCardCreator() {
+            CardCreatorController constructor = new CardCreatorController();
+
+            constructor.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                    // check if the user cancelled the creation
+                    if (!constructor.isCancelled()) {
+
+                        // check if the name is already used
+                        if (isNameUsed(constructor.getNameData())) {
+                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                            optionPaneStyle.showMessageDialog(null, "Please, enter a unique name", "name already used",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // create a new constructor
+                            createCardCreator();
+                        }
+
+                        // check if the name is empty
+                        if (constructor.getNameData().isEmpty()) {
+                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                            optionPaneStyle.showMessageDialog(null, "Please, enter a name", "empty name",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // create a new constructor
+                            createCardCreator();
+                        }
+
+                        // check if the date is valid
+                        else if (!isValidDateFormat(constructor.getDueDateData())
+                                && !constructor.getDueDateData().isEmpty()) {
+                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                            optionPaneStyle.showMessageDialog(null,
+                                    "Please, enter a valid date (yyyy-MM-dd) in the future", "invalid date",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // create a new constructor
+                            createCardCreator();
+                        }
+
+                        // create a new card
+                        String name = constructor.getNameData();
+                        String description = constructor.getDescriptionData();
+                        LocalDate dueDate = LocalDate.parse(constructor.getDueDateData());
+                        Card card = new Card(name, description, dueDate);
+                        // add Participants
+                        ArrayList<Object> participants = constructor.getParticipantsData();
+                        for (Object participant : participants) {
+                            card.addMember((Participant) participant);
+                        }
+
+                        // add the card to the list
+                        cardList.addCard(card);
+                        cardListView.update(cardList);
+                    }
+                }
+            });
+        }
+
+        public static boolean isValidDateFormat(String dateString) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            try {
+                // check if the date is in the future
+                if (LocalDate.parse(dateString, formatter).isBefore(LocalDate.now())) {
+                    return false;
+                }
+                return true;
+            } catch (DateTimeParseException e) {
+                return false;
+            }
         }
     }
-    
+
 }

@@ -19,15 +19,19 @@ import java.io.*;
  * This class is the main class of the program.
  * <br>
  * <br>
- * It contains the main method, which creates the main frame of the program, and the saveData and loadData methods,
+ * It contains the main method, which creates the main frame of the program, and
+ * the saveData and loadData methods,
  * which save and load the data of the program.
  * <br>
  * <br>
- * It also contains the workspaceManager object, which contains all the data of the program, and the
- * selectedWorkspaceIndex variable, which contains the index of the selected workspace.
+ * It also contains the workspaceManager object, which contains all the data of
+ * the program, and the
+ * selectedWorkspaceIndex variable, which contains the index of the selected
+ * workspace.
  * <br>
  * <br>
- * It assembles View and controller classes to create the main frame of the program.
+ * It assembles View and controller classes to create the main frame of the
+ * program.
  *
  * @author Pierre Fromont Boissel
  * @see WorkspaceManager
@@ -51,14 +55,16 @@ public class TrelloMain {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * This method saves the data of the workspaceManager object in the data/datas.ser file.
+     * This method saves the data of the workspaceManager object in the
+     * data/datas.ser file.
      * <br>
      * <br>
      * <b>WARNING:</b> This method will overwrite the data/datas.ser file.
      * <br>
      * <br>
      *
-     * @param workspaceManager, WorkspaceManager, the workspaceManager object to save.
+     * @param workspaceManager, WorkspaceManager, the workspaceManager object to
+     *                          save.
      * @throws IOException,           if the file is not found.
      * @throws FileNotFoundException, if the file is not found.
      * @author Pierre Fromont Boissel
@@ -82,9 +88,11 @@ public class TrelloMain {
     }
 
     /**
-     * This method loads the data of the data/datas.ser file in a WorkspaceManager object.
+     * This method loads the data of the data/datas.ser file in a WorkspaceManager
+     * object.
      *
-     * @return WorkspaceManager, the WorkspaceManager object loaded from the data/datas.ser file.
+     * @return WorkspaceManager, the WorkspaceManager object loaded from the
+     *         data/datas.ser file.
      * @throws IOException,            if the file is not found.
      * @throws ClassNotFoundException, if the class is not found.
      * @author Pierre Fromont Boissel
@@ -106,6 +114,8 @@ public class TrelloMain {
             System.out.println("Data has been successfully loaded.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            System.out.println("No data found.");
+            workspaceManager = new WorkspaceManager();
         }
         return workspaceManager;
     }
@@ -118,7 +128,8 @@ public class TrelloMain {
      * This is the main method of the program.
      * <br>
      * <br>
-     * It loads the data from the data/datas.ser file, creates the main frame, and saves the data when the program is
+     * It loads the data from the data/datas.ser file, creates the main frame, and
+     * saves the data when the program is
      * closed.
      * <br>
      * <br>
@@ -133,29 +144,30 @@ public class TrelloMain {
      * @see java.awt.event.WindowAdapter
      * @see java.awt.event.WindowEvent
      */
-    
+
     public static void main(String[] args) {
 
         // -------------------------------------------------------------------------------------------------------------
         // LOAD DATA
         // -------------------------------------------------------------------------------------------------------------
+
         workspaceManager = loadData();
-        if (workspaceManager == null) {
-            workspaceManager = new WorkspaceManager();
-        }
 
         LoginView loginView = new LoginView();
-        LoginController loginController = new LoginController(loginView, workspaceManager);
-        
+        LoginController loginController = new LoginController(loginView,
+                workspaceManager);
+
         // -------------------------------------------------------------------------------------------------------------
         // CREATE THE MAIN FRAME AFTER LOGING IN
         // -------------------------------------------------------------------------------------------------------------
         loginView.addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
-                SwingUtilities.invokeLater(() -> {     
+                SwingUtilities.invokeLater(() -> {
 
-                    // Create a new JFrame, set its title to "Trello-Lite", set its size to 1200x700, set its default close
-                    // operation to JFrame.EXIT_ON_CLOSE, set its location to the center of the screen, and make it visible.
+                    // Create a new JFrame, set its title to "Trello-Lite", set its size to
+                    // 1200x700, set its default close
+                    // operation to JFrame.EXIT_ON_CLOSE, set its location to the center of the
+                    // screen, and make it visible.
                     JFrame mainFrame = new JFrame("Trello-Lite");
                     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     mainFrame.setSize(1200, 700);
@@ -163,46 +175,49 @@ public class TrelloMain {
                     mainFrame.setVisible(true);
                     mainFrame.setMinimumSize(new Dimension(650, 680));
                     mainFrame.setLayout(new BorderLayout());
-        
+
                     // ---------------------------------------------------------------------------------------------------------
                     // LEFT PANEL
                     // ---------------------------------------------------------------------------------------------------------
-        
-                    // Create the left panel, set its size to 250x700, and set its layout to FlowLayout.
+
+                    // Create the left panel, set its size to 250x700, and set its layout to
+                    // FlowLayout.
                     PanelStyle leftPanel = new PanelStyle(250, 700, new FlowLayout());
                     ((FlowLayout) leftPanel.getLayout()).setHgap(5);
                     ((FlowLayout) leftPanel.getLayout()).setVgap(5);
                     leftPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, MyStyle.BORDER_COLOR));
-        
+
                     // Add the workspaceInfoView and the managerView to the left panel.
                     WorkspaceInfoView workspaceInfoView = new WorkspaceInfoView();
                     leftPanel.add(workspaceInfoView);
                     ManagerView managerView = new ManagerView();
                     leftPanel.add(managerView);
-        
+
                     // Add the left panel to the main panel.
                     mainFrame.add(leftPanel, BorderLayout.WEST);
-        
+
                     // ---------------------------------------------------------------------------------------------------------
                     // RIGHT PANEL
                     // ---------------------------------------------------------------------------------------------------------
-        
+
                     // create the workspaceView
-                    WorkspaceView workspaceView = new WorkspaceView(workspaceManager.getWorkspace(selectedWorkspaceIndex));
-        
+                    WorkspaceView workspaceView = new WorkspaceView(
+                            workspaceManager.getWorkspace(selectedWorkspaceIndex));
+
                     // add the workspaceView to the main panel
                     mainFrame.add(workspaceView, BorderLayout.CENTER);
-        
+
                     // ---------------------------------------------------------------------------------------------------------
                     // ADD CONTROLLERS
                     // ---------------------------------------------------------------------------------------------------------
                     new ManagerController(managerView, workspaceView, workspaceInfoView);
-        
+
                     /*
-                     * To simplify the code we add the other controllers in the constructor of the View.
+                     * To simplify the code we add the other controllers in the constructor of the
+                     * View.
                      * This avoids to create a new controller for each view.
                      */
-        
+
                     // ---------------------------------------------------------------------------------------------------------
                     // SAVE DATA
                     // ---------------------------------------------------------------------------------------------------------
@@ -214,6 +229,6 @@ public class TrelloMain {
                     });
                 });
             }
-        });        
+        });
     }
 }
