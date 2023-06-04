@@ -167,8 +167,17 @@ public class ManagerView extends PanelStyle {
      * @see JComboBox
      */
     public void updateWorkspaceComboBox() {
-        String[] workspaceNames = TrelloMain.workspaceManager.getWorkspacesNames();
-        workspaceComboBox.setModel(new DefaultComboBoxModel<>(workspaceNames));
+        System.out.println("updateWorkspaceComboBox");
+        workspaceComboBox.removeAllItems();
+        for(Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+            for(Participant participant : workspace.getMembers()) {
+                if(participant.equals(TrelloMain.currentParticipant)) {
+                    workspaceComboBox.addItem(workspace.getName());
+                }
+            }
+        }
+        //String[] workspaceNames = TrelloMain.workspaceManager.getWorkspacesNames();
+        //workspaceComboBox.setModel(new DefaultComboBoxModel<>(workspaceNames));
     }
 
     /**

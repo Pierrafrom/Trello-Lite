@@ -47,7 +47,7 @@ public class TrelloMain {
     // PUBLIC STATIC VARIABLES
     // -----------------------------------------------------------------------------------------------------------------
     public static WorkspaceManager workspaceManager = new WorkspaceManager();
-    public static int selectedWorkspaceIndex = 0;
+    public static int selectedWorkspaceIndex;
     public static Participant currentParticipant;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -113,6 +113,7 @@ public class TrelloMain {
             fileIn.close();
             System.out.println("Data has been successfully loaded.");
         } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Data has not been found.");
             e.printStackTrace();
             System.out.println("No data found.");
             workspaceManager = new WorkspaceManager();
@@ -144,7 +145,6 @@ public class TrelloMain {
      * @see java.awt.event.WindowAdapter
      * @see java.awt.event.WindowEvent
      */
-
     public static void main(String[] args) {
 
         // -------------------------------------------------------------------------------------------------------------

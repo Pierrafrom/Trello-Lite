@@ -55,8 +55,8 @@ public class LoginView extends JFrame{
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
 
-    private final int WIDTH = 800;
-    private final int HEIGHT = 750;
+    private final int WIDTH = 500;
+    private final int HEIGHT = 470;
 
     ButtonStyle loginButton;
     ButtonStyle signupButton;
@@ -149,8 +149,8 @@ public class LoginView extends JFrame{
         
         // Create the center panel that will contain the login and signup forms.
         GridBagLayout gbLayout = new GridBagLayout(); // Create the grid bag layout.
-        gbLayout.columnWidths = new int[] { 90, 160, 50, 90, 160 }; // Set the column widths.
-        gbLayout.rowHeights = new int[] { 60, 60, 60, 30, 60, 60, 60, 60}; // Set the row heights.
+        gbLayout.columnWidths = new int[] { 80, 150, 40, 80, 150 }; // Set the column widths.
+        gbLayout.rowHeights = new int[] { 50, 50, 50, 20, 50, 50, 50, 50}; // Set the row heights.
 
         PanelStyle centerPanel = new PanelStyle(WIDTH, 100, gbLayout);
         centerPanel.setBackground(MyStyle.BACKGROUND_COLOR);

@@ -46,7 +46,6 @@ public class Participant implements Serializable {
     private String lastName;
     private String mail;
     private String password;
-    private Role role;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -64,14 +63,13 @@ public class Participant implements Serializable {
      * @author Pierre Fromont Boissel
      * @see Role
      */
-    public Participant(String firstName, String lastName, String mail, Role role) {
+    public Participant(String firstName, String lastName, String mail) {
         id = nextId;
         nextId++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.mail = mail;
         this.password = "0000";
-        this.role = role;
     }
 
     /**
@@ -85,14 +83,13 @@ public class Participant implements Serializable {
      * @param role      ,Role, the role of the participant.
      * @author Pierre Fromont Boissel
      */
-    public Participant(String firstName, String lastName, String mail, String password, Role role) {
+    public Participant(String firstName, String lastName, String mail, String password) {
         id = nextId;
         nextId++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.mail = mail;
         this.password = password;
-        this.role = role;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -150,17 +147,6 @@ public class Participant implements Serializable {
     }
 
     /**
-     * Getter of the role of the participant.
-     *
-     * @return role, Role, the role of the participant.
-     * @author Pierre Fomont Boissel
-     * @see Role
-     */
-    public Role getRole() {
-        return role;
-    }
-
-    /**
      * Setter of the first name of the participant.
      *
      * @param firstName, String, the first name of the participant.
@@ -198,17 +184,6 @@ public class Participant implements Serializable {
      */
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    /**
-     * Setter of the role of the participant.
-     *
-     * @param role, Role, the role of the participant.
-     * @author Pierre Fromont Boissel
-     * @see Role
-     */
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
