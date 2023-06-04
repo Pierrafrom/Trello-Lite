@@ -154,7 +154,7 @@ public class TrelloMain {
         workspaceManager = loadData();
 
         LoginView loginView = new LoginView();
-        LoginController loginController = new LoginController(loginView,
+        new LoginController(loginView,
                 workspaceManager);
 
         // -------------------------------------------------------------------------------------------------------------
