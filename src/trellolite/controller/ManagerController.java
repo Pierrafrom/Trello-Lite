@@ -379,7 +379,7 @@ public class ManagerController {
         public void actionPerformed(ActionEvent e) {
             
             if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant) != Role.ADMIN){
-                String message = "To modify a board and its members, you must be an admin!";
+                String message = "To modify a wokspace and its members, you must be an admin!";
                 OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                 optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
