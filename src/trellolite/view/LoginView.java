@@ -404,4 +404,4 @@ public class LoginView extends JFrame{
         signupTextFields[3] = passwordSignupTextField;
         return signupTextFields;
     }
-}a
+}
