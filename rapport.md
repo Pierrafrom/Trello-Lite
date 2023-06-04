@@ -47,10 +47,10 @@ public void addCard(Card card) { cards.add(card); }
 Une fois la partie modèle écrite et fonctionnelle, la deuxième étape a été de créer les interfaces graphiques, soit la partie vue de l'application. Nous avons alors créé les panel, en utilisant premièrement les JPanel issues directment de Java Swing. Puis après quelques fonctions réalisés, nous nous sommes rendu compte qu'il serait  pratique d'avoir une certaine unité entre les differentes vues réalisées. Par conséquent, l'idée de créer des classes qui implémentent directement les classes *Java Swing*, mais qui ont déja tout les attributs tel que la couleur ou les polices, nous est venu à l'esprit. Histoire de rendre le tout encore plus modulable, nous avons créer une interface qui a comme attributs les couleurs et les polices, et qui est implémenté par les classes qui gèrent les styles. Cela nous permet d'avoir un code plus propre, et plus facile à modifier. Par exemple, si nous voulions changer une couleur qui est présente sur les cartes, les listes et les tableaux, au lieu de devoir modifier chaque classe manuellement, nous n'avions qu'à changer une valeur dans l'interface. Toutes ces classes ont été placés dans le package *style*, afin de bien séparer les vues qui sont concrétement affichés sur l'écran contrairement à celle-ci qui servent des ces dites-vues.
 
 ### Contrôleur
-à compléter
+Il nous fallait ensuite ajouter des controller a notre interface graphique, soit la partie controller de l'application. Nous avons alors créer les different controller necessaire pour le bon fonctionnement de l'application. Pour chaque controller nous avons du procéder à des testes comme : verifier si le nom du board qu'on veut créer n'est pas null, verifier si le workspace qu'on veux supprimer existe ... Cela nous a permis de n'avoir aucune incohérence et erreur. Les controller de création ou de suppression affiche une nouvelle fenetre qui vas indiquer a l'utilisateur ce qu'il doit faire et si il y a une erreur dans sa saisie.
 
 ## Test
-à compléter
+Pour tester chaque class nous avons créer plusieur main temporaire. Pour les vues cela était très utile pour placer plus facilement au bonne endroit chaque élement. Les main temporaire nous permettais aussi de voire si chacune des methode était fonctionelle et nous effectué bien la tache demander. 
 
 ## Conventions
 
