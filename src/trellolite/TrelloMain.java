@@ -145,7 +145,6 @@ public class TrelloMain {
      * @see java.awt.event.WindowAdapter
      * @see java.awt.event.WindowEvent
      */
-
     public static void main(String[] args) {
 
         // -------------------------------------------------------------------------------------------------------------

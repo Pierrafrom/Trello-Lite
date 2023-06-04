@@ -557,7 +557,8 @@ public class ManagerController {
 
                             Participant newParticipant = new Participant(constructor.getFieldsContent().get(1),
                                     constructor.getFieldsContent().get(2),
-                                    constructor.getFieldsContent().get(0));
+                                    constructor.getFieldsContent().get(0),
+                                    constructor.getFieldsContent().get(3));
 
                             // Add the new participant to the workspace
                             TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)

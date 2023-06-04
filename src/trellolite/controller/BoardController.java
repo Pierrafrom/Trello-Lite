@@ -1,5 +1,7 @@
 package trellolite.controller;
 
+import trellolite.TrelloMain;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
@@ -82,7 +84,7 @@ public class BoardController {
             final int RENAME_BOARD = 0;
             final int ADD_NEW_LIST = 1;
             final int DELETE_BOARD = 2;
-
+            
             Role role = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant);
             if (role == Role.OBSERVER){
                 String message = "Sorry, observers can not modify the workspace in any way.";
