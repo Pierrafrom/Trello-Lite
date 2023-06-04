@@ -7,7 +7,6 @@ import trellolite.controller.BoardController;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
-import trellolite.controller.CardListController;
 import trellolite.model.Board;
 import trellolite.style.*;
 
@@ -181,9 +180,7 @@ public class BoardView extends PanelStyle {
         // Add the lists to the content panel
         for (int i = 0; i < board.getLists().size(); i++) {
             // Create the list view
-            CardListView listView = new CardListView(board.getList(i));
-            // Add the controller to the list view
-            new CardListController(board, board.getList(i), this, listView);
+            CardListView listView = new CardListView(board.getList(i), this, board);
             // Add the list view to the content panel
             contentPanel.add(listView);
         }

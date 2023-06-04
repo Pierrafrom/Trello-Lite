@@ -1,10 +1,13 @@
 package trellolite.view;
 
+import trellolite.controller.FullCardController;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
 import trellolite.model.Card;
+import trellolite.model.CardList;
 import trellolite.style.*;
 
 import javax.swing.*;
@@ -34,7 +37,10 @@ public class FullCardView extends JFrame {
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
     private ButtonStyle modifyButton;
+    private ButtonStyle deleteButton;
     private Card card;
+    private CardListView cardListView;
+    private CardList cardList;
 
     // -----------------------------------------------------------------------------------------------------------------
     // GETTERS
@@ -42,6 +48,10 @@ public class FullCardView extends JFrame {
 
     public ButtonStyle getModifyButton() {
         return modifyButton;
+    }
+
+    public ButtonStyle getDeleteButton() {
+        return deleteButton;
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -73,7 +83,7 @@ public class FullCardView extends JFrame {
      * @see trellolite.style.ButtonStyle
      * @see trellolite.style.ScrollPaneStyle
      */
-    public FullCardView(Card card) {
+    public FullCardView(Card card, CardListView cardListView, CardList cardList) {
         super(card.getName());
         setSize(500, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -82,6 +92,8 @@ public class FullCardView extends JFrame {
         setLocationRelativeTo(null);
 
         this.card = card;
+        this.cardListView = cardListView;
+        this.cardList = cardList;
 
         // main panel
         PanelStyle mainPanel = new PanelStyle(500, 500, new BorderLayout());
@@ -95,6 +107,8 @@ public class FullCardView extends JFrame {
 
         // bottom panel
         mainPanel.add(createBottomPanel(), BorderLayout.SOUTH);
+
+        new FullCardController(card, this, cardListView, cardList);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -111,7 +125,7 @@ public class FullCardView extends JFrame {
      */
     public void update(Card card) {
         this.dispose();
-        new FullCardView(card);
+        new FullCardView(card, cardListView, cardList);
     }
 
     /**
@@ -211,9 +225,14 @@ public class FullCardView extends JFrame {
         dueDateLabel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2,
                 MyStyle.BORDER_COLOR));
         bottomPanel.add(dueDateLabel);
+        PanelStyle buttonPanel = new PanelStyle(250, 50, new GridLayout(1, 2));
         // Modify button
-        modifyButton = new ButtonStyle("Modify", 250, 50);
-        bottomPanel.add(modifyButton);
+        modifyButton = new ButtonStyle("Modify", 125, 50);
+        buttonPanel.add(modifyButton);
+        // delete button
+        deleteButton = new ButtonStyle("Delete", 125, 50);
+        buttonPanel.add(deleteButton);
+        bottomPanel.add(buttonPanel);
         return bottomPanel;
     }
 

@@ -144,7 +144,7 @@ public class CardCreatorController extends JFrame {
         dueDateField.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2, MyStyle.BORDER_COLOR));
         bottomPanel.add(dueDateField);
         // create button
-        createButton = new ButtonStyle("Create", 0, 0);
+        createButton = new ButtonStyle("Confirm", 0, 0);
         createButton.addActionListener(e -> {
             cancelled = false;
             dispose();

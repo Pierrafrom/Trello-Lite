@@ -1,10 +1,13 @@
 package trellolite.view;
 
+import trellolite.controller.CardListController;
+
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
 import trellolite.controller.OpenCardController;
+import trellolite.model.Board;
 import trellolite.model.Card;
 import trellolite.model.CardList;
 import trellolite.style.*;
@@ -35,13 +38,15 @@ public class CardListView extends PanelStyle {
     public static final int WIDTH = 300;
     public static final int HEIGHT = 500;
     public static final int MARGIN = 10;
-    private final String[] actions = {"Change the name", "Add a Card", "Delete this list"};
+    private final String[] actions = { "Change the name", "Add a Card", "Delete this list" };
 
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
     private CardList cardList;
     private ComboBoxStyle actionsComboBox;
+    private BoardView boardView;
+    private Board board;
 
     // -----------------------------------------------------------------------------------------------------------------
     // GETTERS
@@ -74,15 +79,18 @@ public class CardListView extends PanelStyle {
      * @see trellolite.style.PanelStyle
      * @see javax.swing.JPanel
      */
-    public CardListView(CardList cardList) {
+    public CardListView(CardList cardList, BoardView boardView, Board board) {
         super(WIDTH, HEIGHT, new BorderLayout());
         this.cardList = cardList;
+        this.boardView = boardView;
+        this.board = board;
         Border lineBorder = BorderFactory.createLineBorder(BORDER_COLOR, 3);
         setBorder(lineBorder);
         // create top panel
         add(createTopPanel(), BorderLayout.NORTH);
         // create content panel
         add(createContentPanel(), BorderLayout.CENTER);
+        new CardListController(board, cardList, boardView, this);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -99,7 +107,9 @@ public class CardListView extends PanelStyle {
      * It is also used when the name of the CardList is changed.
      * </p>
      *
-     * @param cardList, CardList, the card list to display.
+     * @param cardList,  CardList, the card list to display.
+     * @param boardView, BoardView, the board view that contains the CardListView.
+     * @param board,     Board, the board that contains the CardList.
      * @author Augustin Lecomte
      * @see trellolite.view.CardPreView
      * @see trellolite.style.PanelStyle
@@ -117,6 +127,7 @@ public class CardListView extends PanelStyle {
         // update content panel
         remove(1);
         add(createContentPanel(), BorderLayout.CENTER, 1);
+        new CardListController(board, cardList, boardView, this);
         revalidate();
         repaint();
     }
@@ -175,7 +186,7 @@ public class CardListView extends PanelStyle {
      * @see javax.swing.JPanel
      */
     private ScrollPaneStyle createContentPanel() {
-        // get the height of the  content panel
+        // get the height of the content panel
         int contentHeight = 0;
         for (int i = 0; i < cardList.getCards().size(); i++) {
             contentHeight += CardPreView.HEIGHT + MARGIN;

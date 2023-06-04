@@ -4,12 +4,6 @@ package trellolite.controller;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
-import trellolite.TrelloMain;
-
-// ---------------------------------------------------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------------------------------------------------
-
 import trellolite.model.Board;
 import trellolite.model.CardList;
 import trellolite.model.Workspace;
@@ -22,8 +16,6 @@ import trellolite.view.WorkspaceView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 import javax.swing.JOptionPane;
 

@@ -22,7 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -115,7 +114,7 @@ public class CardListController {
                     String newName = optionPaneStyle.showInputDialog("Enter the new name of the list");
 
                     empty = newName.isEmpty();
-                    used = isNameUsed(newName);
+                    used = isNameUsedList(newName);
 
                     // Rename the CardList model only if the name is not empty and unique in the
                     // board
@@ -171,9 +170,25 @@ public class CardListController {
          * @return boolean, True if the name is already used, false otherwise
          * @author Augustin Lecomte
          */
-        private boolean isNameUsed(String name) {
+        private boolean isNameUsedList(String name) {
             for (CardList list : board.getLists()) {
                 if (list.getName().equals(name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Check if the name is already used in the cardlist
+         *
+         * @param name ,String, The name to check
+         * @return boolean, True if the name is already used, false otherwise
+         * @author Augustin Lecomte
+         */
+        private boolean isNameUsedCard(String name) {
+            for (Card card: cardList.getCards()) {
+                if (card.getName().equals(name)) {
                     return true;
                 }
             }
@@ -191,12 +206,11 @@ public class CardListController {
                     if (!constructor.isCancelled()) {
 
                         // check if the name is already used
-                        if (isNameUsed(constructor.getNameData())) {
+                        if (isNameUsedCard(constructor.getNameData())) {
                             OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                             optionPaneStyle.showMessageDialog(null, "Please, enter a unique name", "name already used",
                                     JOptionPane.ERROR_MESSAGE);
-                            // create a new constructor
-                            createCardCreator();
+                            return;
                         }
 
                         // check if the name is empty
@@ -204,8 +218,7 @@ public class CardListController {
                             OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                             optionPaneStyle.showMessageDialog(null, "Please, enter a name", "empty name",
                                     JOptionPane.ERROR_MESSAGE);
-                            // create a new constructor
-                            createCardCreator();
+                            return;
                         }
 
                         // check if the date is valid
@@ -215,14 +228,16 @@ public class CardListController {
                             optionPaneStyle.showMessageDialog(null,
                                     "Please, enter a valid date (yyyy-MM-dd) in the future", "invalid date",
                                     JOptionPane.ERROR_MESSAGE);
-                            // create a new constructor
-                            createCardCreator();
+                            return;
                         }
 
                         // create a new card
                         String name = constructor.getNameData();
                         String description = constructor.getDescriptionData();
-                        LocalDate dueDate = LocalDate.parse(constructor.getDueDateData());
+                        LocalDate dueDate = null;
+                        if (!constructor.getDueDateData().isEmpty()) {
+                        dueDate = LocalDate.parse(constructor.getDueDateData());
+                        }
                         Card card = new Card(name, description, dueDate);
                         // add Participants
                         ArrayList<Object> participants = constructor.getParticipantsData();

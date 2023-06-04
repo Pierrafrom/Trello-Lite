@@ -99,9 +99,7 @@ public class OpenCardController {
         @Override
         public void actionPerformed(ActionEvent e) {
             // open the card
-            FullCardView fullCardView = new FullCardView(card);
-            // add the controller
-            FullCardController fullCardController = new FullCardController(card, fullCardView, cardListView, cardList);
+            new FullCardView(card, cardListView, cardList);
         }
     }
 }
