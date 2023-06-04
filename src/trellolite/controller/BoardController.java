@@ -6,6 +6,7 @@ package trellolite.controller;
 
 import trellolite.model.Board;
 import trellolite.model.CardList;
+import trellolite.model.Role;
 import trellolite.model.Workspace;
 import trellolite.style.ComboBoxStyle;
 import trellolite.style.OptionPaneStyle;
@@ -81,6 +82,14 @@ public class BoardController {
             final int RENAME_BOARD = 0;
             final int ADD_NEW_LIST = 1;
             final int DELETE_BOARD = 2;
+
+            Role role = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant);
+            if (role == Role.OBSERVER){
+                String message = "Sorry, observers can not modify the workspace in any way.";
+                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+                }
 
             // Switch between the different actions of the actionComboBox
             switch (actionComboBox.getSelectedIndex()) {
