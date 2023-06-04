@@ -1,10 +1,17 @@
-package trellolite.style;
+package trellolite.controller;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
 import javax.swing.*;
+
+import trellolite.style.ButtonStyle;
+import trellolite.style.ComboBoxStyle;
+import trellolite.style.LabelStyle;
+import trellolite.style.PanelStyle;
+import trellolite.style.TextType;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -17,13 +24,13 @@ import java.util.ArrayList;
  * @see javax.swing.JFrame
  * @see javax.swing.SwingUtilities
  */
-public class ConstructorStyle extends JFrame implements MyStyle {
+public class ParticipantConstructor extends JFrame {
 
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
     private final PanelStyle mainPanel;
-    private boolean cancelled = true;
+    protected boolean cancelled = true;
 
     // -----------------------------------------------------------------------------------------------------------------
     // GETTERS
@@ -37,7 +44,7 @@ public class ConstructorStyle extends JFrame implements MyStyle {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Constructor of the ConstructorStyle.
+     * Constructor of the ParticipantConstructor.
      * It is a pop-up window that allows the user to create a new object.
      *
      * @param title  : arg1 : String, the title of the window.
@@ -54,7 +61,7 @@ public class ConstructorStyle extends JFrame implements MyStyle {
      *      fields.add("Field 2");
      *      fields.add("Field 3");
      *
-     *      ConstructorStyle constructor1 = new ConstructorStyle("Constructor 1", 400, 300, fields);
+     *      ParticipantConstructor constructor1 = new ParticipantConstructor("Constructor 1", 400, 300, fields);
      *     }
      * });
      * }</pre>
@@ -68,7 +75,7 @@ public class ConstructorStyle extends JFrame implements MyStyle {
      * @see java.util.ArrayList
      * @see java.lang.String
      */
-    public ConstructorStyle(String title, int width, int height, ArrayList<String> fields) {
+    public ParticipantConstructor(String title, int width, int height, ArrayList<String> fields) {
         super(title);
         setSize(width, height);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -95,7 +102,7 @@ public class ConstructorStyle extends JFrame implements MyStyle {
     }
 
     /**
-     * Constructor of the ConstructorStyle.
+     * Constructor of the ParticipantConstructor.
      * It is a pop-up window that allows the user to create a new object.
      *
      * @param title,            String, the title of the window.
@@ -128,7 +135,7 @@ public class ConstructorStyle extends JFrame implements MyStyle {
      *          comboBoxesLabels.add("ComboBox 1:");
      *          comboBoxesLabels.add("ComboBox 2:");
      *
-     *          new ConstructorStyle("object constructor", 400, 300, fields, comboBoxes, comboBoxesLabels);
+     *          new ParticipantConstructor("object constructor", 400, 300, fields, comboBoxes, comboBoxesLabels);
      *      }
      *  });
      * }</pre>
@@ -143,7 +150,7 @@ public class ConstructorStyle extends JFrame implements MyStyle {
      * @see java.util.ArrayList
      * @see java.lang.String
      */
-    public ConstructorStyle(String title, int width, int height, ArrayList<String> fields,
+    public ParticipantConstructor(String title, int width, int height, ArrayList<String> fields,
                             ArrayList<ComboBoxStyle> comboBoxes, ArrayList<String> comboBoxesLabels) {
         super(title);
         setSize(width, height);

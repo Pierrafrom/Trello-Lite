@@ -11,7 +11,6 @@ import trellolite.model.Role;
 import trellolite.model.Workspace;
 import trellolite.style.ButtonStyle;
 import trellolite.style.ComboBoxStyle;
-import trellolite.style.ConstructorStyle;
 import trellolite.style.OptionPaneStyle;
 import trellolite.view.ManagerView;
 import trellolite.view.WorkspaceInfoView;
@@ -447,7 +446,7 @@ public class ManagerController {
         }
 
         /**
-         * This method creates a new ConstructorStyle object for the participant controller window.
+         * This method creates a new ParticipantConstructor object for the participant controller window.
          * <p>
          * It allows to create a new participant.
          * </p>
@@ -456,7 +455,7 @@ public class ManagerController {
          * @param comboBoxes       the combo boxes of the controller window
          * @param comboBoxesLabels the labels of the combo boxes of the controller window
          * @author Pierre Fromont Boissel
-         * @see ConstructorStyle
+         * @see ParticipantConstructor
          * @see trellolite.style
          * @see java.awt.event.WindowAdapter
          * @see java.awt.event.WindowEvent
@@ -465,8 +464,8 @@ public class ManagerController {
          */
         public void createNewParticipantController(ArrayList<String> fields, ArrayList<ComboBoxStyle> comboBoxes,
                                                    ArrayList<String> comboBoxesLabels) {
-            // Create a new ConstructorStyle object for the participant constructor
-            ConstructorStyle constructor = new ConstructorStyle("Add a participant",
+            // Create a new ParticipantConstructor object for the participant constructor
+            ParticipantConstructor constructor = new ParticipantConstructor("Add a participant",
                     400, 300, fields, comboBoxes, comboBoxesLabels);
 
             // Add a WindowListener to the constructor window

@@ -1,7 +1,9 @@
 package trellolite.controller;
 
 import trellolite.model.Board;
+import trellolite.model.Card;
 import trellolite.model.CardList;
+import trellolite.model.Participant;
 import trellolite.style.ComboBoxStyle;
 import trellolite.style.OptionPaneStyle;
 import trellolite.view.BoardView;
@@ -9,10 +11,14 @@ import trellolite.view.CardListView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 public class CardListController {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -53,8 +59,9 @@ public class CardListController {
                     // Change the name of the list
                     OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                     String newName = optionPaneStyle.showInputDialog("Enter the new name of the list", "New name");
-                    if(newName.isEmpty()) {
-                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name", "empty name", JOptionPane.ERROR_MESSAGE);
+                    if (newName.isEmpty()) {
+                        optionPaneStyle.showMessageDialog(null, "Please, enter a valid name", "empty name",
+                                JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                     cardList.setName(newName);
@@ -67,10 +74,7 @@ public class CardListController {
                     break;
                 case 1:
                     // Add a new card
-                    
-                    createNewCard();
-                    
-
+                    createCardCreator();
                     break;
                 case 2:
                     // Delete the list
@@ -89,16 +93,69 @@ public class CardListController {
             }
         }
 
-        private void createNewCard() {
-            // create the frame for the new card creation
-            JFrame frame = new JFrame("New card");
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.setSize(300, 200);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-            
+        // -----------------------------------------------------------------------------------------------------------------
+        // METHODS
+        // -----------------------------------------------------------------------------------------------------------------
 
+        private void createCardCreator() {
+            CardCreatorController constructor = new CardCreatorController();
 
+            constructor.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                    // check if the user cancelled the creation
+                    if (!constructor.isCancelled()) {
+
+                        // check if the name is empty
+                        if (constructor.getNameData().isEmpty()) {
+                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                            optionPaneStyle.showMessageDialog(null, "Please, enter a name", "empty name",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // create a new constructor
+                            createCardCreator();
+                        }
+
+                        // check if the date is valid
+                        else if (!isValidDateFormat(constructor.getDueDateData()) && !constructor.getDueDateData().isEmpty()) {
+                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                            optionPaneStyle.showMessageDialog(null, "Please, enter a valid date (yyyy-MM-dd) in the future", "invalid date",
+                                    JOptionPane.ERROR_MESSAGE);
+                            // create a new constructor
+                            createCardCreator();
+                        }
+
+                        // create a new card
+                        String name = constructor.getNameData();
+                        String description = constructor.getDescriptionData();
+                        LocalDate dueDate = LocalDate.parse(constructor.getDueDateData());
+                        Card card = new Card(name, description, dueDate);
+                        // add Participants
+                        ArrayList<Object> participants = constructor.getParticipantsData();
+                        for (Object participant : participants) {
+                            card.addMember((Participant) participant);
+                        }
+
+                        // add the card to the list
+                        cardList.addCard(card);
+                        cardListView.update(cardList);
+                    }
+                }
+            });
+        }
+
+        public static boolean isValidDateFormat(String dateString) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            try {
+                // check if the date is in the future
+                if (LocalDate.parse(dateString, formatter).isBefore(LocalDate.now())) {
+                    return false;
+                }
+                return true;
+            } catch (DateTimeParseException e) {
+                return false;
+            }
         }
     }
 }
