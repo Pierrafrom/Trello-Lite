@@ -5,6 +5,7 @@ package trellolite.style;
 // ---------------------------------------------------------------------------------------------------------------------
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class represents the OptionPane style of the application.
@@ -38,5 +39,16 @@ public class OptionPaneStyle extends JOptionPane implements MyStyle {
         UIManager.put("OptionPane.messageFont", new java.awt.Font(TEXT_FONT, TEXT_FONT_STYLE, TEXT_FONT_SIZE));
         UIManager.put("Button.background", BUTTON_COLOR);
         UIManager.put("Button.foreground", TEXT_COLOR);
+    }
+
+    public static void showMessageDialog(Component parentComponent, Object message, String title, int messageType) {
+        UIManager.put("OptionPane.background", BACKGROUND_COLOR);
+        UIManager.put("Panel.background", BACKGROUND_COLOR);
+        UIManager.put("OptionPane.messageForeground", TEXT_COLOR);
+        UIManager.put("OptionPane.messageFont", new java.awt.Font(TEXT_FONT, TEXT_FONT_STYLE, TEXT_FONT_SIZE));
+        UIManager.put("Button.background", BUTTON_COLOR);
+        UIManager.put("Button.foreground", TEXT_COLOR);
+
+        JOptionPane.showMessageDialog(parentComponent, message, title, messageType);
     }
 }

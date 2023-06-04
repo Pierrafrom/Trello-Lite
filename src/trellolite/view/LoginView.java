@@ -157,7 +157,7 @@ public class LoginView extends JFrame{
         GridBagConstraints gbc = new GridBagConstraints();
 
         createLoginForm(gbc, centerPanel);
-        createSeparators(gbLayout, gbc, centerPanel);
+        createSeparators(gbc, centerPanel);
         createSignupForm(gbc, centerPanel);
         return centerPanel;
     }
@@ -238,7 +238,6 @@ public class LoginView extends JFrame{
      * <br>
      * <br>----------------------------- OR -----------------------------
      * 
-     * @param gbLayout , GridBagLayout, the grid bag layout.
      * @param gbc , GridBagConstraints, the grid bag constraints.
      * @param centerPanel , PanelStyle, the center panel of the login view.
      * @author Augustin Lecomte
@@ -251,7 +250,7 @@ public class LoginView extends JFrame{
      * @see TextType
      * @see SwingConstants
      */
-    private void createSeparators(GridBagLayout gbLayout, GridBagConstraints gbc, PanelStyle centerPanel){
+    private void createSeparators(GridBagConstraints gbc, PanelStyle centerPanel){
         // Create the separators and add them to the center panel.
         JSeparator separator1 = new JSeparator();
         separator1.setPreferredSize(new Dimension(230, 10));

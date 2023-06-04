@@ -87,7 +87,7 @@ public class ManagerView extends PanelStyle {
     }
 
     /**
-     * This method returns the delete workspace button.
+     * This method returns the deleted workspace button.
      *
      * @return ButtonStyle, the delete workspace button.
      * @author Pierre Fromont Boissel
@@ -98,9 +98,9 @@ public class ManagerView extends PanelStyle {
     }
 
     /**
-     * This method returns the actions combo box.
+     * This method returns the action combo box.
      *
-     * @return ComboBoxStyle, the actions combo box.
+     * @return ComboBoxStyle, the action combo box.
      * @author Pierre Fromont Boissel
      * @see ComboBoxStyle
      */
@@ -119,13 +119,14 @@ public class ManagerView extends PanelStyle {
         createWorkspaceComboBox();
         add(workspaceComboBox);
         // create the buttons
-        PanelStyle buttonsPanel = new PanelStyle(240, 40, new GridLayout(1, 2, 10, 0));
+        PanelStyle buttonsPanel = new PanelStyle(240, 40,
+                new GridLayout(1, 2, 10, 0));
         createNewWorkspaceButton();
         buttonsPanel.add(newWorkspaceButton);
         createDeleteWorkspaceButton();
         buttonsPanel.add(deleteWorkspaceButton);
         add(buttonsPanel);
-        // create the actions combo box
+        // create the action combo box
         createActionsComboBox();
         add(actionsComboBox);
     }
@@ -156,7 +157,8 @@ public class ManagerView extends PanelStyle {
         int comboBoxWidth = 240;
         int comboBoxHeight = 40;
         int comboBoxFontSize = 16;
-        workspaceComboBox = new ComboBoxStyle((String[])workspaceNames.toArray(new String[0]), comboBoxWidth, comboBoxHeight, comboBoxFontSize);
+        workspaceComboBox = new ComboBoxStyle(workspaceNames.toArray(new String[0]),
+                comboBoxWidth, comboBoxHeight, comboBoxFontSize);
     }
 
     /**
@@ -169,15 +171,13 @@ public class ManagerView extends PanelStyle {
     public void updateWorkspaceComboBox() {
         System.out.println("updateWorkspaceComboBox");
         workspaceComboBox.removeAllItems();
-        for(Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
-            for(Participant participant : workspace.getMembers()) {
-                if(participant.equals(TrelloMain.currentParticipant)) {
+        for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+            for (Participant participant : workspace.getMembers()) {
+                if (participant.equals(TrelloMain.currentParticipant)) {
                     workspaceComboBox.addItem(workspace.getName());
                 }
             }
         }
-        //String[] workspaceNames = TrelloMain.workspaceManager.getWorkspacesNames();
-        //workspaceComboBox.setModel(new DefaultComboBoxModel<>(workspaceNames));
     }
 
     /**
@@ -195,7 +195,7 @@ public class ManagerView extends PanelStyle {
     }
 
     /**
-     * This method creates the delete workspace button.
+     * This method creates the deleted workspace button.
      *
      * @author Pierre Fromont Boissel
      * @see ButtonStyle
@@ -209,7 +209,7 @@ public class ManagerView extends PanelStyle {
     }
 
     /**
-     * This method creates the actions combo box.
+     * This method creates the action combo box.
      *
      * @author Pierre Fromont Boissel
      * @see ComboBoxStyle

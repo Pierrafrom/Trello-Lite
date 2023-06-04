@@ -4,6 +4,7 @@ package trellolite.model;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -28,9 +29,12 @@ import java.util.ArrayList;
  */
 public class WorkspaceManager implements Serializable {
 
-    // Attributes
+    // -----------------------------------------------------------------------------------------------------------------
+    // ATTRIBUTES
+    // -----------------------------------------------------------------------------------------------------------------
+    @Serial
     private static final long serialVersionUID = -1723741337874081155L;
-    private ArrayList<Workspace> workspaces;
+    private final ArrayList<Workspace> workspaces;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -67,7 +71,7 @@ public class WorkspaceManager implements Serializable {
     /**
      * This method returns the workspace of the workspace manager at the given index.
      *
-     * @param index ,int, this is the index of the workspace to return.
+     * @param index int, this is the index of the workspace to return.
      * @return Workspace, this is the workspace of the workspace manager at the given index.
      * @author Pierre Fromont Boissel
      * @see ArrayList
@@ -77,22 +81,6 @@ public class WorkspaceManager implements Serializable {
         return workspaces.get(index);
     }
 
-    /**
-     * This method returns the names of the workspaces of the workspace manager.
-     *
-     * @return String[], this is the names of the workspaces of the workspace manager.
-     * @author Pierre Fromont Boissel
-     * @see ArrayList
-     * @see Workspace
-     */
-    public String[] getWorkspacesNames() {
-        String[] names = new String[workspaces.size()];
-        for (int i = 0; i < workspaces.size(); i++) {
-            names[i] = workspaces.get(i).getName();
-        }
-        return names;
-    }
-
     // -----------------------------------------------------------------------------------------------------------------
     // METHODS
     // -----------------------------------------------------------------------------------------------------------------
@@ -100,7 +88,7 @@ public class WorkspaceManager implements Serializable {
     /**
      * This method adds a workspace to the workspace manager.
      *
-     * @param workspace ,Workspace, this is the workspace to add.
+     * @param workspace Workspace, this is the workspace to add.
      * @author Pierre Fromont Boissel
      * @see Workspace
      */
@@ -111,7 +99,7 @@ public class WorkspaceManager implements Serializable {
     /**
      * This method removes a workspace from the workspace manager.
      *
-     * @param workspace ,Workspace, this is the workspace to remove.
+     * @param workspace Workspace, this is the workspace to remove.
      * @author Pierre Fromont Boissel
      * @see Workspace
      */

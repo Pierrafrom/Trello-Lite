@@ -4,6 +4,7 @@ package trellolite.model;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.io.Serializable;
 
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * A board can be serialized and deserialized.
  * A board can be created with a name or without a name.
  * If a board is created without a name, a default name is given.
- * The default name is "Board " + id.
+ * The default name is "Board" + id.
  * The id is automatically generated.
  *
  * @author Glen Denoual
@@ -29,6 +30,7 @@ public class Board implements Serializable {
     //------------------------------------------------------------------------------------------------------------------
     // STATIC ATTRIBUTES
     //------------------------------------------------------------------------------------------------------------------
+    @Serial
     private static final long serialVersionUID = 4518357025796495586L;
     private static int nextId = 0;
 
@@ -69,7 +71,7 @@ public class Board implements Serializable {
      * The id is automatically generated.
      * The lists are initialized to an empty ArrayList.
      * The nextId is incremented.
-     * The name is set to "Board " + id.
+     * The name is set to "Board" + id.
      *
      * @author Glen Denoual
      * @see ArrayList
@@ -172,16 +174,24 @@ public class Board implements Serializable {
      * The list is removed from the lists.
      *
      * @param list, CardList, the list to remove from the board
-     * @return boolean, true if the list was removed, false otherwise
      * @author Glen Denoual
      * @see CardList
      * @see Card
      * @see ArrayList
      */
-    public boolean removeList(CardList list) {
-        return lists.remove(list);
+    public void removeList(CardList list) {
+        lists.remove(list);
     }
 
+    /**
+     * Returns the list at the given index.
+     *
+     * @param i, int, the index of the list to return
+     * @author Augustin Lecomte
+     * @see CardList
+     * @see Card
+     * @see ArrayList
+     */
     public CardList getList(int i) {
         return lists.get(i);
     }

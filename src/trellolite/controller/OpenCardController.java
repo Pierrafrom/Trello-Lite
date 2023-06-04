@@ -15,9 +15,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * This class is the controller of the card preview.
+ * This class is the controller of the CARD preview.
  * <p>
- * It opens the card when the user clicks on the button.
+ * It opens the CARD when the user clicks on the button.
  * It creates a FullCardView and a FullCardController.
  * </p>
  *
@@ -34,10 +34,9 @@ public class OpenCardController {
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
-    private Card card;
-    private CardListView cardListView;
-    private CardList cardList;
-    private ButtonStyle openButton;
+    private final Card CARD;
+    private final CardListView CARDLISTVIEW;
+    private final CardList CARDLIST;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTOR
@@ -46,17 +45,17 @@ public class OpenCardController {
     /**
      * This constructor creates an OpenCardController.
      * <p>
-     * It creates a button to open the card.
+     * It creates a button to open the CARD.
      * It adds an ActionListener to the button.
-     * When the user clicks on the button, it opens the card.
+     * When the user clicks on the button, it opens the CARD.
      * It creates a FullCardView and a FullCardController.
-     * It passes the card, the cardListView and the cardList to the FullCardController.
+     * It passes the CARD, the CARDLISTVIEW and the CARDLIST to the FullCardController.
      * </p>
      *
-     * @param card,         Card, the card to open
-     * @param cardPreView,  CardPreView, the card preview
-     * @param cardListView, CardListView, the card list view
-     * @param cardList,     CardList, the card list
+     * @param card,         Card, the CARD to open
+     * @param cardPreView,  CardPreView, the CARD preview
+     * @param cardListView, CardListView, the CARD list view
+     * @param cardList,     CardList, the CARD list
      * @author Pierre Fromont Boissel
      * @see trellolite.model.Card
      * @see trellolite.view.CardPreView
@@ -67,11 +66,11 @@ public class OpenCardController {
      * @see trellolite.style.ButtonStyle     *
      */
     public OpenCardController(Card card, CardPreView cardPreView, CardListView cardListView, CardList cardList) {
-        this.card = card;
-        this.cardListView = cardListView;
-        this.cardList = cardList;
+        this.CARD = card;
+        this.CARDLISTVIEW = cardListView;
+        this.CARDLIST = cardList;
 
-        openButton = cardPreView.getOpenCard();
+        ButtonStyle openButton = cardPreView.getOpenCard();
         openButton.addActionListener(new OpenCardListener());
     }
 
@@ -80,11 +79,11 @@ public class OpenCardController {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * This class is the listener of the button to open the card.
+     * This class is the listener of the button to open the CARD.
      * <p>
-     * When the user clicks on the button, it opens the card.
+     * When the user clicks on the button, it opens the CARD.
      * It creates a FullCardView and a FullCardController.
-     * It passes the card, the cardListView and the cardList to the FullCardController.
+     * It passes the CARD, the CARDLISTVIEW and the CARDLIST to the FullCardController.
      * </p>
      *
      * @author Pierre Fromont Boissel
@@ -98,8 +97,8 @@ public class OpenCardController {
     private class OpenCardListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // open the card
-            new FullCardView(card, cardListView, cardList);
+            // open the CARD
+            new FullCardView(CARD, CARDLISTVIEW, CARDLIST);
         }
     }
 }

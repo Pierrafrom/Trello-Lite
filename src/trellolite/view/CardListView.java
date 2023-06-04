@@ -1,11 +1,6 @@
 package trellolite.view;
 
 import trellolite.controller.CardListController;
-
-// ---------------------------------------------------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------------------------------------------------
-
 import trellolite.controller.OpenCardController;
 import trellolite.model.Board;
 import trellolite.model.Card;
@@ -38,24 +33,24 @@ public class CardListView extends PanelStyle {
     public static final int WIDTH = 300;
     public static final int HEIGHT = 500;
     public static final int MARGIN = 10;
-    private final String[] actions = { "Change the name", "Add a Card", "Delete this list" };
+    private final String[] actions = {"Change the name", "Add a Card", "Delete this list"};
 
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
     private CardList cardList;
     private ComboBoxStyle actionsComboBox;
-    private BoardView boardView;
-    private Board board;
+    private final BoardView BOARDVIEW;
+    private final Board BOARD;
 
     // -----------------------------------------------------------------------------------------------------------------
     // GETTERS
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * This method returns the actions combo box.
+     * This method returns the action combo box.
      *
-     * @return ComboBoxStyle, the actions combo box.
+     * @return ComboBoxStyle, the action combo box.
      * @author Augustin Lecomte
      * @see ComboBoxStyle
      * @see trellolite.model.CardList
@@ -82,11 +77,11 @@ public class CardListView extends PanelStyle {
     public CardListView(CardList cardList, BoardView boardView, Board board) {
         super(WIDTH, HEIGHT, new BorderLayout());
         this.cardList = cardList;
-        this.boardView = boardView;
-        this.board = board;
+        BOARDVIEW = boardView;
+        BOARD = board;
         Border lineBorder = BorderFactory.createLineBorder(BORDER_COLOR, 3);
         setBorder(lineBorder);
-        // create top panel
+        // create a top panel
         add(createTopPanel(), BorderLayout.NORTH);
         // create content panel
         add(createContentPanel(), BorderLayout.CENTER);
@@ -107,9 +102,7 @@ public class CardListView extends PanelStyle {
      * It is also used when the name of the CardList is changed.
      * </p>
      *
-     * @param cardList,  CardList, the card list to display.
-     * @param boardView, BoardView, the board view that contains the CardListView.
-     * @param board,     Board, the board that contains the CardList.
+     * @param cardList, CardList, the card list to display.
      * @author Augustin Lecomte
      * @see trellolite.view.CardPreView
      * @see trellolite.style.PanelStyle
@@ -127,7 +120,7 @@ public class CardListView extends PanelStyle {
         // update content panel
         remove(1);
         add(createContentPanel(), BorderLayout.CENTER, 1);
-        new CardListController(board, cardList, boardView, this);
+        new CardListController(BOARD, cardList, BOARDVIEW, this);
         revalidate();
         repaint();
     }
@@ -156,12 +149,12 @@ public class CardListView extends PanelStyle {
      * @see javax.swing.JComboBox
      */
     private PanelStyle createTopPanel() {
-        // create top panel
+        // create a top panel
         PanelStyle topPanel = new PanelStyle(WIDTH, 100, new GridLayout(2, 1));
         // add list name
         LabelStyle listName = new LabelStyle(cardList.getName(), TextType.SUBTITLE, SwingConstants.CENTER);
         topPanel.add(listName);
-        // add actions combo box
+        // add action combo box
         PanelStyle actionPanel = new PanelStyle(WIDTH, 30, new FlowLayout(FlowLayout.CENTER, MARGIN, MARGIN));
         actionsComboBox = new ComboBoxStyle(actions, 240, 30);
         actionPanel.add(actionsComboBox);

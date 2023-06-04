@@ -4,6 +4,7 @@ package trellolite.model;
 // IMPORTS
 // --------------------------------------------------------------------------------------------------------------------
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * A card can be created with a name, a description and a due date.
  * A card can be created with no name, no description, no due date and no participants.
  * If a card is created with no name, a default name is given.
- * The default name is "Card " + id.
+ * The default name is "Card" + id.
  * The id is automatically generated.
  * The card is not archived by default.
  * The card is created with no participants.
@@ -42,6 +43,7 @@ public class Card implements Serializable {
     // -----------------------------------------------------------------------------------------------------------------
     // STATIC ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
+    @Serial
     private static final long serialVersionUID = -5546002422160290154L;
     private static int nextId = 0;
 
@@ -51,9 +53,9 @@ public class Card implements Serializable {
     private final int id;
     private String name;
     private String description;
-    private boolean archived;
     private LocalDate dueDate;
     private ArrayList<Participant> participants;
+    private ArrayList<Card> linkedCards;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTORS
@@ -80,6 +82,7 @@ public class Card implements Serializable {
         this.description = description;
         this.dueDate = dueDate;
         participants = new ArrayList<>();
+        linkedCards = new ArrayList<>();
     }
 
     /**
@@ -95,9 +98,9 @@ public class Card implements Serializable {
         nextId++;
         name = "";
         description = "";
-        archived = false;
         dueDate = null;
         participants = new ArrayList<>();
+        linkedCards = new ArrayList<>();
     }
 
     /**
@@ -114,9 +117,9 @@ public class Card implements Serializable {
         nextId++;
         this.name = name;
         description = "";
-        archived = false;
         dueDate = null;
         participants = new ArrayList<>();
+        linkedCards = new ArrayList<>();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -155,17 +158,6 @@ public class Card implements Serializable {
     }
 
     /**
-     * Getter of the archived status of the card.
-     *
-     * @return boolean, the archived status of the card.
-     * @author Glen Denoual
-     * @see boolean
-     */
-    public boolean getArchived() {
-        return archived;
-    }
-
-    /**
      * Getter of the due date of the card.
      *
      * @return LocalDate, the due date of the card.
@@ -189,16 +181,14 @@ public class Card implements Serializable {
     }
 
     /**
-     * Getter of the participant at the given index of the card.
+     * Getter of the linked cards of the card.
      *
-     * @param index, int, the index of the participant to return.
-     * @return Participant, the participant at the given index of the card.
-     * @author Augustin Lecomte
-     * @see Participant
+     * @return ArrayList<Card>, the linked cards of the card.
+     * @author Pierre Fromont Boissel
      * @see ArrayList
      */
-    public Participant getParticipant(int index) {
-        return participants.get(index);
+    public ArrayList<Card> getLinkedCards() {
+        return linkedCards;
     }
 
     /**
@@ -223,18 +213,6 @@ public class Card implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Setter for the archived status
-     * Sets the archived status of the card to the given archived status.
-     *
-     * @param archived, boolean, the new archived status of the board
-     * @author Glen Denoual
-     * @see boolean
-     */
-    public void setArchived(boolean archived) {
-        this.archived = archived;
     }
 
     /**
@@ -269,8 +247,8 @@ public class Card implements Serializable {
     /**
      * This method adds a participant to the card at the end of the participants list.
      *
-     * @param member ,Participant, the participant to add to the card.
-	 * @author Glen Denoual
+     * @param member Participant, the participant to add to the card.
+     * @author Glen Denoual
      * @see Participant
      */
     public void addMember(Participant member) {
@@ -278,32 +256,69 @@ public class Card implements Serializable {
     }
 
     /**
-     * This method removes a participant from the card.
+     * This method returns a string containing the list of the participants of the card.
      *
-     * @param member ,Participant, the participant to remove from the card.
-     * @author Glen Denoual
+     * @return String, the list of the participants of the card.
+     * @author Pierre Fromont Boissel
+     * @see String
      * @see Participant
+     * @see ArrayList
+     * @see StringBuilder
      */
-    public void removeMember(Participant member) {
-        participants.remove(member);
+    public String showParticipants() {
+        StringBuilder string = new StringBuilder("<html><ul>");
+        for (Participant p : participants) {
+            string.append("<li>").append(p.getMail()).append("</li>");
+        }
+        string.append("</ul></html>");
+        return string.toString();
     }
 
-	/**
-	 * This method returns a string containing the list of the participants of the card.
-	 *
-	 * @return String, the list of the participants of the card.
-	 * @author Pierre Fromont Boissel
-	 * @see String
-	 * @see Participant
-	 * @see ArrayList
-	 * @see StringBuilder
-	 */
-	public String showParticipants() {
-		StringBuilder string = new StringBuilder("<html><ul>");
-		for (Participant p : participants) {
-			string.append("<li>").append(p.getMail()).append("</li>");
-		}
-		string.append("</ul></html>");
-		return string.toString();
-	}
+    /**
+     * This method returns a string containing the list of the linked cards of the card.
+     *
+     * @param card Card, the card to add to the list of the linked cards of the card.
+     * @author Pierre Fromont Boissel
+     * @see String
+     * @see Card
+     * @see ArrayList
+     * @see StringBuilder
+     */
+    public void addLinkedCard(Card card) {
+        linkedCards.add(card);
+    }
+
+    /**
+     * This method returns a string containing the list of the linked cards of the card.
+     *
+     * @return String, the list of the linked cards of the card.
+     * @author Pierre Fromont Boissel
+     * @see String
+     * @see Card
+     * @see StringBuilder
+     */
+    public String toString() {
+        return getName();
+    }
+
+    /**
+     * This method returns a string containing the list of the linked cards of the card.
+     *
+     * @return String, the list of the linked cards of the card.
+     * @author Pierre Fromont Boissel
+     * @see String
+     * @see Card
+     * @see StringBuilder
+     */
+    public String showLinkedCards() {
+        if (linkedCards.isEmpty()) {
+            return "No linked cards";
+        }
+        StringBuilder string = new StringBuilder("<html><ul>");
+        for (Card c : linkedCards) {
+            string.append("<li>").append(c.getName()).append("</li>");
+        }
+        string.append("</ul></html>");
+        return string.toString();
+    }
 }

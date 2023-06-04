@@ -23,6 +23,8 @@ public class WorkspaceView extends TabbedPaneStyle {
     // -----------------------------------------------------------------------------------------------------------------
     private Workspace workspace;
 
+    private final WorkspaceInfoView WORKSPACEINFOVIEW;
+
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTOR
     // -----------------------------------------------------------------------------------------------------------------
@@ -38,13 +40,14 @@ public class WorkspaceView extends TabbedPaneStyle {
      * @see trellolite.style.TabbedPaneStyle
      * @see javax.swing.JTabbedPane
      */
-    public WorkspaceView(Workspace workspace) {
+    public WorkspaceView(Workspace workspace, WorkspaceInfoView workspaceInfoView) {
         super();
         this.workspace = workspace;
+        this.WORKSPACEINFOVIEW = workspaceInfoView;
         // Add the boards to the tabbed pane
         for (int i = 0; i < workspace.getBoards().size(); i++) {
             // create a board view
-            BoardView boardView = new BoardView(workspace.getBoards().get(i), this);
+            BoardView boardView = new BoardView(workspace.getBoards().get(i), this, workspaceInfoView);
             // add the board to the tabbed pane
             addTab(workspace.getBoards().get(i).getName(), boardView);
         }
@@ -73,7 +76,7 @@ public class WorkspaceView extends TabbedPaneStyle {
         // Add the boards to the tabbed pane
         for (int i = 0; i < workspace.getBoards().size(); i++) {
             // create a board view
-            BoardView boardView = new BoardView(workspace.getBoards().get(i), this);
+            BoardView boardView = new BoardView(workspace.getBoards().get(i), this, WORKSPACEINFOVIEW);
             // add the board to the tabbed pane
             addTab(workspace.getBoards().get(i).getName(), boardView);
         }

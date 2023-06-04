@@ -4,6 +4,7 @@ package trellolite.model;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * A list of cards can be created with a name.
  * A list of cards can be created with no name, no archived status and no cards.
  * If a list of cards is created with no name, a default name is given.
- * The default name is "List " + id.
+ * The default name is "List" + id.
  * The id is automatically generated.
  * The list of cards is created with no cards.
  * The list of cards is created with no archived status.
@@ -47,6 +48,7 @@ public class CardList implements Serializable {
     // -----------------------------------------------------------------------------------------------------------------
     // STATIC ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
+    @Serial
     private static final long serialVersionUID = 6903435592741052994L;
     private static int nextId = 0;
 
@@ -55,7 +57,6 @@ public class CardList implements Serializable {
     // -----------------------------------------------------------------------------------------------------------------
     private final int id;
     private String name;
-    private boolean archived;
     private ArrayList<Card> cards;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -66,18 +67,16 @@ public class CardList implements Serializable {
      * Constructor of the class List.
      * The list is created with the given name, archived status and cards.
      *
-     * @param name     ,String, the name of the list.
-     * @param archived ,boolean, the archived status of the list.
+     * @param name     String, the name of the list.
      * @param cards    ,ArrayList<Card>, the cards of the list.
      * @author Roxane Zaharia
      * @see ArrayList
      * @see Card
      */
-    public CardList(String name, boolean archived, ArrayList<Card> cards) {
+    public CardList(String name, ArrayList<Card> cards) {
         id = nextId;
         nextId++;
         this.name = name;
-        this.archived = archived;
         this.cards = cards;
     }
 
@@ -86,7 +85,7 @@ public class CardList implements Serializable {
      * The list is created with the given name and archived status.
      * The list is created with no cards.
      *
-     * @param name ,String, the name of the list.
+     * @param name String, the name of the list.
      * @author Pierre Fromont Boissel
      * @see ArrayList
      * @see Card
@@ -95,7 +94,6 @@ public class CardList implements Serializable {
         id = nextId;
         nextId++;
         this.name = name;
-        this.archived = false;
         cards = new ArrayList<>();
     }
 
@@ -125,16 +123,6 @@ public class CardList implements Serializable {
     }
 
     /**
-     * Getter for the archived status.
-     *
-     * @return boolean, the archived status of the list.
-     * @author Roxanne Zaharia
-     */
-    public boolean getArchived() {
-        return archived;
-    }
-
-    /**
      * Getter for the cards.
      *
      * @return ArrayList<Card>, the cards of the list.
@@ -149,7 +137,7 @@ public class CardList implements Serializable {
     /**
      * Getter for the card at the given index.
      *
-     * @param index ,int, the index of the card.
+     * @param index int, the index of the card.
      * @return Card, the card at the given index of the list of cards of the list.
      * @author Augustin Lecomte
      * @see Card
@@ -162,23 +150,12 @@ public class CardList implements Serializable {
      * Setter for the name.
      * Sets the name of the list with the given name.
      *
-     * @param name ,String, the name of the list.
+     * @param name String, the name of the list.
      * @author Roxanne Zaharia
      * @see String
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Setter for the archived status.
-     * Sets the archived status of the list with the given archived status.
-     *
-     * @param archived ,boolean, the archived status of the list.
-     * @author Roxanne Zaharia
-     */
-    public void setArchived(boolean archived) {
-        this.archived = archived;
     }
 
     /**
@@ -201,7 +178,7 @@ public class CardList implements Serializable {
     /**
      * This method adds a card to the list at the end of the list.
      *
-     * @param card ,Card, the card to add to the list.
+     * @param card Card, the card to add to the list.
      * @author Roxane Zaharia
      * @see Card
      * @see ArrayList
@@ -213,7 +190,7 @@ public class CardList implements Serializable {
     /**
      * This method removes a card from the list.
      *
-     * @param card ,Card, the card to remove from the list.
+     * @param card Card, the card to remove from the list.
      * @author Roxane Zaharia
      * @see Card
      * @see ArrayList

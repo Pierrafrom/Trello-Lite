@@ -1,21 +1,14 @@
 package trellolite.controller;
 
 import trellolite.TrelloMain;
-
-// ---------------------------------------------------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------------------------------------------------
-
-import trellolite.model.Board;
-import trellolite.model.Card;
-import trellolite.model.CardList;
-import trellolite.model.Role;
-import trellolite.model.Participant;
+import trellolite.model.*;
 import trellolite.style.ComboBoxStyle;
 import trellolite.style.OptionPaneStyle;
 import trellolite.view.BoardView;
+import trellolite.view.CardCreatorView;
 import trellolite.view.CardListView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -25,13 +18,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 /**
  * This class is the controller of the Board class.
  *
  * @author Augustin Lecomte
  * @author Pierre Fromont Boissel
+ * @see trellolite.model.Board
+ * @see trellolite.view.BoardView
+ * @see trellolite.controller.CardListController
  */
 public class CardListController {
 
@@ -54,9 +48,9 @@ public class CardListController {
      * Constructor of the BoardController class.
      *
      * @param board        ,Board, The board
-     * @param cardList     ,CardList, The card list
-     * @param boardView    ,BoardView, The board view
-     * @param cardListView ,CardListView, The card list view
+     * @param cardList     CardList, The card list
+     * @param boardView    BoardView, The board view
+     * @param cardListView CardListView, The card list view
      * @see trellolite.model.Board
      * @see trellolite.model.CardList
      * @see trellolite.view.BoardView
@@ -82,8 +76,22 @@ public class CardListController {
      *
      * @author Pierre Fromont Boissel
      * @author Augustin Lecomte
+     * @see trellolite.view.CardListView
+     * @see trellolite.controller.CardListController
+     * @see trellolite.model.CardList
      */
     private class ActionComboBoxListener implements ActionListener {
+
+        // ---------------------------------------------------------------------------------------------------------
+        // CONSTANTS
+        // ---------------------------------------------------------------------------------------------------------
+
+        final int CHANGE_NAME = 0;
+        final int ADD_CARD = 1;
+        final int DELETE_LIST = 2;
+
+        private CardCreatorView cardCreatorView;
+
         /**
          * Action performed when the user selects an action in the actionComboBox
          *
@@ -94,35 +102,25 @@ public class CardListController {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            // --------------------------------------------------------------------------------------------------------------
-            // CONSTANTS
-            // --------------------------------------------------------------------------------------------------------------
-
-            final int CHANGE_NAME = 0;
-            final int ADD_CARD = 1;
-            final int DELETE_LIST = 2;
-
-            Role role = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant);
-            if (role == Role.OBSERVER){
+            Role role = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole
+                    (TrelloMain.currentParticipant);
+            if (role == Role.OBSERVER) {
                 String message = "Sorry, observers can not modify the workspace in any way.";
-                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                OptionPaneStyle.showMessageDialog(null, message, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Switch between the different actions of the actionComboBox
             switch (actionComboBox.getSelectedIndex()) {
                 case CHANGE_NAME -> {
-                    // Changing the name of the cardList
-
                     // Instantiate the variables
-                    boolean empty = false;
-                    boolean used = false;
+                    boolean empty;
+                    boolean used;
                     String alert;
                     String titleAlert = "Invalid name";
 
-                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                    String newName = optionPaneStyle.showInputDialog("Enter the new name of the list");
+                    String newName = OptionPaneStyle.showInputDialog("Enter the new name of the list");
 
                     empty = newName.isEmpty();
                     used = isNameUsedList(newName);
@@ -135,10 +133,8 @@ public class CardListController {
                             alert = "The name cannot be empty";
                         else
                             alert = "The name is already used in this board";
-                        String message = "Please, enter a valid name";
-                        String title = "Empty name";
 
-                        optionPaneStyle.showMessageDialog(null, alert, titleAlert,
+                        OptionPaneStyle.showMessageDialog(null, alert, titleAlert,
                                 JOptionPane.ERROR_MESSAGE);
                         break;
                     }
@@ -149,12 +145,8 @@ public class CardListController {
                     actionComboBox = cardListView.getActionsComboBox();
                     actionComboBox.addActionListener(new ActionComboBoxListener());
                 }
-                case ADD_CARD -> {
-                    // Add a new card
-                    createCardCreator();
-                }
+                case ADD_CARD -> createCardCreator();
                 case DELETE_LIST -> {
-                    // Delete the list
                     // Ask for confirmation
                     ConfirmationDialog dialogController = new ConfirmationDialog();
                     String message = "Are you sure you want to delete the list : " + cardList.getName() + " ?";
@@ -170,16 +162,20 @@ public class CardListController {
             }
         }
 
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
         // METHODS
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
 
         /**
          * Check if the name is already used in the board
          *
-         * @param name ,String, The name to check
+         * @param name String, The name to check
          * @return boolean, True if the name is already used, false otherwise
          * @author Augustin Lecomte
+         * @see trellolite.model.Board
+         * @see trellolite.model.CardList
+         * @see trellolite.view.BoardView
+         * @see trellolite.view.CardListView
          */
         private boolean isNameUsedList(String name) {
             for (CardList list : board.getLists()) {
@@ -191,14 +187,14 @@ public class CardListController {
         }
 
         /**
-         * Check if the name is already used in the cardlist
+         * Check if the name is already used in the card list
          *
-         * @param name ,String, The name to check
+         * @param name String, The name to check
          * @return boolean, True if the name is already used, false otherwise
          * @author Augustin Lecomte
          */
         private boolean isNameUsedCard(String name) {
-            for (Card card: cardList.getCards()) {
+            for (Card card : cardList.getCards()) {
                 if (card.getName().equals(name)) {
                     return true;
                 }
@@ -206,54 +202,70 @@ public class CardListController {
             return false;
         }
 
+        /**
+         * Create a CardCreatorView to create a new card in the card list
+         *
+         * @author Pierre Fromont Boissel
+         * @see trellolite.view.CardCreatorView
+         * @see trellolite.model.Card
+         * @see trellolite.model.CardList
+         */
         private void createCardCreator() {
-            CardCreatorController constructor = new CardCreatorController();
+            // dispose the previous cardCreatorView if it exists
+            if (cardCreatorView != null) {
+                cardCreatorView.dispose();
+            }
+            // create a new cardCreatorView
+            cardCreatorView = new CardCreatorView();
 
-            constructor.addWindowListener(new WindowAdapter() {
+            // add a listener to the cardCreatorView
+            cardCreatorView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
 
-                    // check if the user cancelled the creation
-                    if (!constructor.isCancelled()) {
+                    // check if the user canceled the creation
+                    if (!cardCreatorView.isCancelled()) {
 
                         // check if the name is already used
-                        if (isNameUsedCard(constructor.getNameData())) {
-                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                            optionPaneStyle.showMessageDialog(null, "Please, enter a unique name", "name already used",
-                                    JOptionPane.ERROR_MESSAGE);
+                        if (isNameUsedCard(cardCreatorView.getNameData())) {
+                            OptionPaneStyle.showMessageDialog(null, "Please, enter a unique" +
+                                    " name", "name already used", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
                         // check if the name is empty
-                        if (constructor.getNameData().isEmpty()) {
-                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                            optionPaneStyle.showMessageDialog(null, "Please, enter a name", "empty name",
-                                    JOptionPane.ERROR_MESSAGE);
+                        if (cardCreatorView.getNameData().isEmpty()) {
+                            OptionPaneStyle.showMessageDialog(null, "Please, enter a name",
+                                    "empty name", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
                         // check if the date is valid
-                        else if (!isValidDateFormat(constructor.getDueDateData())
-                                && !constructor.getDueDateData().isEmpty()) {
-                            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                            optionPaneStyle.showMessageDialog(null,
-                                    "Please, enter a valid date (yyyy-MM-dd) in the future", "invalid date",
-                                    JOptionPane.ERROR_MESSAGE);
+                        else if (!isValidDateFormat(cardCreatorView.getDueDateData())
+                                && !cardCreatorView.getDueDateData().isEmpty()) {
+                            OptionPaneStyle.showMessageDialog(null,
+                                    "Please, enter a valid date (yyyy-MM-dd) in the future",
+                                    "invalid date", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
                         // create a new card
-                        String name = constructor.getNameData();
-                        String description = constructor.getDescriptionData();
+                        String name = cardCreatorView.getNameData();
+                        String description = cardCreatorView.getDescriptionData();
                         LocalDate dueDate = null;
-                        if (!constructor.getDueDateData().isEmpty()) {
-                        dueDate = LocalDate.parse(constructor.getDueDateData());
+                        if (!cardCreatorView.getDueDateData().isEmpty()) {
+                            dueDate = LocalDate.parse(cardCreatorView.getDueDateData());
                         }
                         Card card = new Card(name, description, dueDate);
                         // add Participants
-                        ArrayList<Object> participants = constructor.getParticipantsData();
+                        ArrayList<Object> participants = cardCreatorView.getParticipantsData();
                         for (Object participant : participants) {
                             card.addMember((Participant) participant);
+                        }
+                        // add cards
+                        ArrayList<Object> cards = cardCreatorView.getCardsData();
+                        for (Object cardObject : cards) {
+                            card.addLinkedCard((Card) cardObject);
                         }
 
                         // add the card to the list
@@ -264,19 +276,24 @@ public class CardListController {
             });
         }
 
+        /**
+         * Check if the date is valid
+         *
+         * @param dateString, String, the date to check
+         * @return boolean, true if the date is valid, false otherwise
+         * @throws DateTimeParseException, if the date is not in the correct format
+         * @author Pierre Fromont Boissel
+         * @see LocalDate
+         */
         public static boolean isValidDateFormat(String dateString) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             try {
                 // check if the date is in the future
-                if (LocalDate.parse(dateString, formatter).isBefore(LocalDate.now())) {
-                    return false;
-                }
-                return true;
+                return !LocalDate.parse(dateString, formatter).isBefore(LocalDate.now());
             } catch (DateTimeParseException e) {
                 return false;
             }
         }
     }
-
 }
