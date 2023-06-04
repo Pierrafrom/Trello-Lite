@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class WorkspaceManager implements Serializable {
 
     // Attributes
+    private static final long serialVersionUID = -1723741337874081155L;
     private ArrayList<Workspace> workspaces;
 
     // -----------------------------------------------------------------------------------------------------------------

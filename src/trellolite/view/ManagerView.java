@@ -5,12 +5,15 @@ package trellolite.view;
 // ---------------------------------------------------------------------------------------------------------------------
 
 import trellolite.TrelloMain;
+import trellolite.model.Participant;
+import trellolite.model.Workspace;
 import trellolite.style.ButtonStyle;
 import trellolite.style.ComboBoxStyle;
 import trellolite.style.PanelStyle;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * This class is a JPanel that displays the workspace manager.
@@ -139,11 +142,21 @@ public class ManagerView extends PanelStyle {
      * @see JComboBox
      */
     private void createWorkspaceComboBox() {
-        String[] workspaceNames = TrelloMain.workspaceManager.getWorkspacesNames();
+        ArrayList<String> workspaceNames = new ArrayList<>();
+
+        for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+            for (Participant participant : workspace.getMembers()) {
+                if (participant.equals(TrelloMain.currentParticipant)) {
+                    workspaceNames.add(workspace.getName());
+                }
+            }
+        }
+        //workspaceComboBox.setModel(new DefaultComboBoxModel<String>((String[]) workspaceNames.toArray()));
+
         int comboBoxWidth = 240;
         int comboBoxHeight = 40;
         int comboBoxFontSize = 16;
-        workspaceComboBox = new ComboBoxStyle(workspaceNames, comboBoxWidth, comboBoxHeight, comboBoxFontSize);
+        workspaceComboBox = new ComboBoxStyle((String[])workspaceNames.toArray(new String[0]), comboBoxWidth, comboBoxHeight, comboBoxFontSize);
     }
 
     /**

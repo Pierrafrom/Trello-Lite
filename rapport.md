@@ -1,8 +1,11 @@
 # Rapport de projet SAE 2 - 1256
 
+## Pierre Fromont Boissel ,Roxane Zaharia, Glen Denoual, Augustin Lecomte
+
 ## Table des matières
 
 - [Rapport de projet SAE 2 - 1256](#rapport-de-projet-sae-2---1256)
+	- [Pierre Fromont Boissel ,Roxane Zaharia, Glen Denoual, Augustin Lecomte](#pierre-fromont-boissel-roxane-zaharia-glen-denoual-augustin-lecomte)
 	- [Table des matières](#table-des-matières)
 	- [Résumé du projet](#résumé-du-projet)
 	- [Explication de notre MVC](#explication-de-notre-mvc)
@@ -13,6 +16,10 @@
 		- [Contrôleur](#contrôleur)
 	- [Test](#test)
 	- [Conventions](#conventions)
+	- [Détails complémentaires](#détails-complémentaires)
+		- [La sérilisation des données](#la-sérilisation-des-données)
+		- [Controlleurs](#controlleurs)
+		- [Rôles](#rôles)
 
 ## Résumé du projet
 
@@ -20,7 +27,7 @@ Le projet **SAE 2 - 1256** consiste à réaliser une application type Trello, en
 
 ## Explication de notre MVC
 
-Pour ce projet, nous avons été fortement conseillé de choisir le modèle **MVC** pour la réalisation de notre application. Nous avons donc choisi de suivre ce modèle, et nous avons séparé notre application en trois packages distincts : le modèle, la vue et le contrôleur. Le **modèle** est la partie qui gère et traite les données. La **vue** est la partie qui permet l’affichage de l'application et des données. Le **contrôleur** est la partie qui gère les interactions entre l'application et l'utilisateur en utilisant les évenements. Toutes ces parties sont indépendantes les unes des autres, mais sont mises en commun dans leurs méthodes et par la class *TrelloMain*. Nous avons aussi choisi de rajouter un **package style** qui contient les classes qui gèrent le style de l’application.
+Pour ce projet, nous avons été fortement conseillé de choisir le modèle **MVC** pour la réalisation de notre application. Nous avons donc choisi de suivre ce modèle, et nous avons séparé notre application en trois packages distincts : le modèle, la vue et le contrôleur. Le **modèle** est la partie qui gère et traite les données. La **vue** est la partie qui permet l’affichage de l'application et des données sérilisés. Le **contrôleur** est la partie qui gère les interactions entre l'application et l'utilisateur en utilisant les évenements. Les boutons sont affichés dans la partie **vue**, mais sont reliés à dse *listeners* et des évenements qui sont eux dans la partie **contrôleur** come dans le **MVC** que la convention exige. Toutes ces parties sont indépendantes les unes des autres, mais sont mises en commun dans leurs méthodes et par la class *TrelloMain*. Nous avons aussi choisi de rajouter un **package style** qui contient les classes qui gèrent le style de l’application.
 
 ## Réalisation de l'application 
 
@@ -77,7 +84,7 @@ public type methodName(type param1, type param2) {
 }
 ```
 
-Enfin, pour rendre le code encore plus lisible, chaque "partie" d'une classe est découpé en blocs. Les blocs sont séparés et délimités par des commentaires. Par exemple, dans une classe *Card*, nous avons un bloc pour les attributs, un bloc pour les constructeurs, un bloc pour les *getters* et *setters*, etc... Cela nous permet d'avoir un code plus lisible, et plus facile à modifier. Voici un exemple de ce que cela donne :
+Enfin, pour rendre le code encore plus lisible, chaque "partie" d'une classe est découpé en blocs. Les blocs sont séparés et délimités par des **commentaires**. Par exemple, dans une classe *Card*, nous avons un bloc pour les attributs, un bloc pour les constructeurs, un bloc pour les *getters* et *setters*, etc... Cela nous permet d'avoir un code plus lisible, et plus facile à modifier. Voici un exemple de ce que cela donne :
 
 ```java
 // -----------------------------------------------------
@@ -100,4 +107,14 @@ public int getId() {
 }
 ```
 
-Les fichiers, quand cela est possible, suivent le schéma suivant : imports -> static attributes -> attributes -> constructors -> getters and setters -> methods.
+## Détails complémentaires
+
+### La sérilisation des données
+Pour que l'utilisateur puisse sauvegarder ses données entre les differentes utilisations de l'application, nous avons dû **sériliser** les objets. Cela permet de transformer les objets en un flux d'octets, qui peuvent ensuite être sauvegardés dans un fichier. Nous l'avons implémenter après la création des vues pour que nous puissions tester à la fois le bon fonctionnement de celles-ci, et en plus d'avoir un retour concret sur les objets sérilisé. Par la suite, nous avons étés amenés à modifier les objets sérilisés pour ajouter des fonctionnalités ou déboguer par exemple. Et nous nous sommes alors rendu compte d'un problème, les objets sérilisés ne sont pas rétro-compatibles. Cela signifie que si nous modifions un objet sérilisé, et que nous essayons de le désériliser, nous aurons une erreur. Après des recherches sur internet, nous nous sommes rendu compte que la *JVM* crée "d'elle même" un *serialVersionUID* pour chaque objet sérilisé. Ce *serialVersionUID* est unique pour chaque objet, et permet de vérifier si l'objet sérilisé est le même que celui qui est désérilisé. Si ce n'est pas le cas, alors nous avons une erreur. Ce *serialVersionUID* est généré automatiquement par la *JVM* en fonction de ses membres et de leurs types, des interfaces implémentés, des méthodes, etc. Il est donc différent à chaque fois que nous modifions l'objet même de manière infime en rajoutant un seul attribut par exemple. Nous avons donc eu à plusieurs reprises des problèmes dès que nous chagions une classe modèle. Nous avons donc décidé de créer nous même le *serialVersionUID* de chaque classe modèle.
+
+### Controlleurs
+jsp trop quoi mettre mais faut expliquer pq c'est relou et que y'a des constructeurs un peu partout.
+
+### Rôles
+Chaque utilisateur de l'application à un rôle attitré. Il y a trois rôles différents : **Admin**, **Member** et **Observer**. Chaque rôle a des droits différents. 
+**Expliquer les droits de chaque rôle pcq je sais pas trop encore**
