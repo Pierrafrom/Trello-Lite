@@ -55,8 +55,25 @@ Par conséquent, l'idée de créer des classes qui implémentent directement les
 Il nous fallait ensuite ajouter des controller a notre interface graphique, soit la partie controller de l'application. Nous avons alors créer les different controller necessaire pour le bon fonctionnement de l'application. Pour chaque controller nous avons du procéder à des testes comme : verifier si le nom du board qu'on veut créer n'est pas null, verifier si le workspace qu'on veux supprimer existe ... Cela nous a permis de n'avoir aucune incohérence et erreur. Les controller de création ou de suppression affiche une nouvelle fenetre qui vas indiquer a l'utilisateur ce qu'il doit faire et si il y a une erreur dans sa saisie.
 
 ## Test
-Pendant notre codage, nous avons du à des moments tester nos fonctions et affichage. Pour ce faire, nous avons créer des main temporaire dans les classes que nous devions tester. 
-Pour les vues cela était très utile pour placer plus facilement au bonne endroit chaque élement. Les main temporaire nous permettais aussi de voir si chacune des methode était fonctionelle et effectuait bien la tâche demander. 
+Pendant notre codage, nous avons du à des moments tester nos fonctions et affichages. Pour ce faire, nous avons créer des **main temporaires** dans les classes que nous devions tester. 
+Les vues ont été plutôt simple à tester, car l'affichage nous indiquait directement si tous fonctionnaient correctement. Par exemple, si nous voulions tester l'affichage d'une liste de cartes, nous n'avions juste qu'à créer une liste de cartes, et à l'afficher. Si l'affichage était **correct**, alors nous pouvions passer à la suite. Si au contraire celui-ci n'était pas **parfait**, alors nous savions qu'il fallait modifier le code. Voici un exemple d'un main de test pour l'affichage d'une liste de cartes :
+
+```java
+public static void main(String[] args) {
+	CardList cardList = new CardList("Test");
+	Card card1 = new Card("Card 1");
+	Card card2 = new Card("Card 2");
+	Card card3 = new Card("Card 3");
+	cardList.addCard(card1);
+	cardList.addCard(card2);
+	cardList.addCard(card3);
+	CardListView cardListView = new CardListView(cardList);
+}
+```
+Ensuite, Pour tester les **controleurs**, ce fût assez simple. Étant donné que nous avions déja "construit" notre application avec les vues, il a juste fallut ajouter les controlleurs aux boutons, et tester si les actions étaient **correctes**. Par exemple, si nous voulions tester le controlleur qui permet de créer un nouveau workspace, nous n'avions qu'à cliquer sur le bouton qui permet de créer un workspace, et vérifier si le workspace était bien créé et que nous avions les bonnes informations d'affichés.
+Par rapport aux styles, comme ces classes ont été implémenté dans toutes les vues, si nous avions une problème, il était vu immédiatement. Il n'y a donc pas eu de test particulier à faire pour ces classes.
+Enfin, les classes modèles, étant assez simple comme dit plus tot, nous n'avons pas eu de besoin particuliers à les tester. Il y a en effet peut de chance de se tromper sur un *getter* ou un *setter*
+
 
 ## Détails complémentaires
 
