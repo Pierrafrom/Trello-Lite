@@ -338,6 +338,57 @@ public class ManagerController {
                 case 0 -> {
                     // Change the name of the workspace
                     System.out.println("Change the name of the workspace");
+                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+
+                    Object changeNamObject = optionPaneStyle.showInputDialog(null,
+                    "Change the name of the workspace", "Change name",
+                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                    if (changeNamObject != null) {
+                        // Convert the object to a string and trim leading and trailing spaces
+                        String workspaceName = changeNamObject.toString().trim();
+
+                        while (workspaceName.isEmpty()) {
+                            // Display an error message indicating that the wprkspace name cannot be empty
+                            optionPaneStyle.showMessageDialog(null, "workspace name cannot be empty!",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
+
+                        changeNamObject = optionPaneStyle.showInputDialog(null,
+                            "Change the name of the workspace", "Change name",
+                               JOptionPane.INFORMATION_MESSAGE, null, null, null);
+              
+                          workspaceName = changeNamObject.toString().trim();
+                        }
+
+                      ArrayList<String> workspaceNames = new ArrayList<String>();
+                      for (Workspace workspace : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)) {
+                         workspaceNames.add(workspace.getName());
+                     }
+
+                     while(!workspaceNames.contains(workspaceName)){
+                          changeNamObject = optionPaneStyle.showInputDialog(null,
+                      "the workspace doesn't exist", "Error",
+                                 JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                     changeNamObject = optionPaneStyle.showInputDialog(null,
+                      "Change the name of the workspace", "Change name",
+                         JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+                        workspaceName = changeNamObject.toString().trim();
+                     
+
+                    }
+                    Workspace workspace = new Workspace(workspaceName);
+                    TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).setName(workspace.getName());
+
+                    workspaceInfoView.update();
+                    workspaceView.update();
+
+                }
+    
+                
+                    
+                   //Workspace.class.setName(changeNamObject.toString());
 
                     // TODO: Change the name of the workspace
                     // change the name of the model using the workspace manager in TrelloMain class
