@@ -251,6 +251,21 @@ public class ManagerController {
                 optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+
+            int nbWorkspacesWithParticipant = 0;
+            for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
+                if(workspace.getMembers().contains(TrelloMain.currentParticipant)){
+                    nbWorkspacesWithParticipant += 1;
+                }
+            }
+
+            if (nbWorkspacesWithParticipant == 1){
+                String message = "You can't delete your only workspace!";
+                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             // Delete the Workspace
             // Ask for confirmation
             ConfirmationDialog dialogController = new ConfirmationDialog();
@@ -261,6 +276,7 @@ public class ManagerController {
 
             // If the user selected "Yes"
             if (result) {
+                /*
                 // Delete the Workspace
                 TrelloMain.workspaceManager.removeWorkspace(
                         TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex));
@@ -268,6 +284,24 @@ public class ManagerController {
                 managerView.updateWorkspaceComboBox();
                 TrelloMain.selectedWorkspaceIndex -= 1;
                 managerView.getWorkspaceComboBox().setSelectedIndex(TrelloMain.selectedWorkspaceIndex);
+                */
+                Workspace targetWorkspace;
+                for(Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
+                    if(workspace.getName().equals(workspaceComboBox.getSelectedItem())){
+                        targetWorkspace = workspace;
+                        TrelloMain.workspaceManager.removeWorkspace(targetWorkspace);
+                        break;
+                    }
+                }
+                for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
+                    if(workspace.getMembers().contains(TrelloMain.currentParticipant)){
+                        TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().indexOf(workspace);
+                        break;
+                    }
+                }
+                workspaceInfoView.update();
+                workspaceView.update();
+                managerView.updateWorkspaceComboBox();
             }
         }
     }
@@ -296,9 +330,17 @@ public class ManagerController {
     private class WorkspaceComboBoxListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            TrelloMain.selectedWorkspaceIndex = workspaceComboBox.getSelectedIndex();
-            workspaceView.changeWorkspace(TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex));
-            workspaceInfoView.update();
+            Workspace targetWorkspace;
+
+            for(Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
+                if(workspace.getName().equals(workspaceComboBox.getSelectedItem())){
+                    targetWorkspace = workspace;
+                    TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().indexOf(targetWorkspace);
+                    workspaceView.changeWorkspace(targetWorkspace);
+                    break;
+                }
+            }
+            workspaceInfoView.update();   
         }
     }
 
@@ -337,7 +379,7 @@ public class ManagerController {
         public void actionPerformed(ActionEvent e) {
             
             if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant) != Role.ADMIN){
-                String message = "To modify the name, delete or add a new Board and add or remove a member, you must be an admin!";
+                String message = "To modify a board and its members, you must be an admin!";
                 OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
                 optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
