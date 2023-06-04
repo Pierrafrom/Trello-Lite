@@ -56,7 +56,7 @@ public class LoginView extends JFrame{
     // -----------------------------------------------------------------------------------------------------------------
 
     private final int WIDTH = 500;
-    private final int HEIGHT = 450;
+    private final int HEIGHT = 470;
 
     ButtonStyle loginButton;
     ButtonStyle signupButton;
@@ -93,6 +93,7 @@ public class LoginView extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
+        setLocationRelativeTo(null);
 
         // Create the main panel that will contain all the other panels.
         PanelStyle mainPanel = new PanelStyle(WIDTH, HEIGHT, new BorderLayout());

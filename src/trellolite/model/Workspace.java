@@ -4,6 +4,8 @@ package trellolite.model;
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.Serializable;
 
 /**
@@ -25,6 +27,7 @@ import java.io.Serializable;
  * </ul>
  *
  * @author Pierre Fromont Boissel
+ * @author Augustin
  * @see CardList
  * @see Card
  * @see Serializable
@@ -43,7 +46,7 @@ public class Workspace implements Serializable{
 	// -----------------------------------------------------------------------------------------------------------------
 	private final int id;
 	private String name;
-	private ArrayList<Participant> members;
+	private Map<Participant, Role> members;
 	private ArrayList<Board> boards;
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -58,6 +61,7 @@ public class Workspace implements Serializable{
 	 * @param name    ,String, this is the name of the workspace.
 	 * @param creator ,Participant, this is the creator of the workspace.
 	 * @author Pierre Fromont Boissel
+	 * @author Augustin Lecomte
 	 * @see Participant
 	 * @see Board
 	 * @see ArrayList
@@ -69,17 +73,18 @@ public class Workspace implements Serializable{
 	public Workspace(String name, Participant creator) {
 		id = nextId++;
 		this.name = name;
-		members = new ArrayList<>();
-		members.add(creator);
-		this.members.get(0).setRole(Role.ADMIN);
+		members = new HashMap<>();
+		members.put(creator, Role.ADMIN);
 		boards = new ArrayList<>();
-		boards.add(new Board());
+		boards.add(new Board("new board"));
 	}
 
 	/**
 	 * This constructor creates a workspace with the given name.
 	 *
 	 * @param name ,String, this is the name of the workspace.
+	 * @author Pierre Fromont Boissel
+	 * @author Augustin Lecomte
 	 * @see Participant
 	 * @see Board
 	 * @see ArrayList
@@ -91,7 +96,7 @@ public class Workspace implements Serializable{
 	public Workspace(String name) {
 		id = nextId++;
 		this.name = name;
-		members = new ArrayList<>();
+		members = new HashMap<>();
 		boards = new ArrayList<>();
 	}
 
@@ -122,11 +127,13 @@ public class Workspace implements Serializable{
 	/**
 	 * This method returns the members of the workspace.
 	 *
-	 * @return ArrayList<Participant>, this is the list of the members of the workspace.
+	 * @return Map<PArticipant, Role>, this is the list of the members of the workspace.
 	 * @author Pierre Fromont Boissel
+	 * @author Augustin Lecomte
 	 * @see Participant
+	 * @see Role
 	 */
-	public ArrayList<Participant> getMembers() { return members; }
+	public Map<Participant, Role> getMapMember() { return members; }
 
 	/**
 	 * This method returns the member of the workspace at the given index.
@@ -136,7 +143,32 @@ public class Workspace implements Serializable{
 	 * @author Augustin Lecomte
 	 * @see Participant
 	 */
-	public Participant getMember(int index){ return members.get(index); }
+	public Participant getMemberAt(int index) {
+		ArrayList<Participant> participants = new ArrayList<>(members.keySet());
+
+        if (index >= 0 && index < members.size()) {
+            return participants.get(index);
+        } else {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+    }
+
+	public ArrayList<Participant> getMembers() {
+		return new ArrayList<>(members.keySet());
+	}
+
+	/**
+	 * This method returns the role of the given participant in the workspace.
+	 * 
+	 * @param participant ,Participant, this is the participant to get the role of.
+	 * @return Role, this is the role of the given participant in the workspace.
+	 * @author Augustin Lecomte
+	 * @see Participant
+	 * @see Role
+	 */
+	public Role getRole(Participant participant) {
+		return members.get(participant);
+	}
 
 	/**
 	 * This method returns the boards of the workspace.
@@ -170,11 +202,12 @@ public class Workspace implements Serializable{
 	/**
 	 * This method sets the members of the workspace.
 	 *
-	 * @param members ,ArrayList<Participant>, this is the list of the members of the workspace.
+	 * @param members ,Map<Participant, Role>, this is the list of the members of the workspace.
 	 * @author Pierre Fromont Boissel
+	 * @author Augustin Lecomte
 	 * @see Participant
 	 */
-	public void setMembers(ArrayList<Participant> members) { this.members = members; }
+	public void setMembers(Map<Participant, Role> members) { this.members = members; }
 
 	/**
 	 * This method sets the boards of the workspace.
@@ -196,11 +229,15 @@ public class Workspace implements Serializable{
 	 * This method is used to display information about the workspace in HTML format
 	 *
 	 * @author Pierre Fromon Boissel
+	 * @author Augustin Lecomte
 	 */
 	public String toStringHTML() {
 		StringBuilder str = new StringBuilder("<html><strong>Workspace</strong> : " + name + "<br>");
 		str.append("<strong>Members</strong> : <br>");
-		for (Participant member : members) {
+
+		ArrayList<Participant> participants = new ArrayList<>(this.members.keySet());
+
+		for (Participant member : participants) {
 			str.append("- ").append(member.getMail()).append("<br>");
 		}
 		str.append("<strong>Boards</strong> : <br>");
@@ -218,7 +255,7 @@ public class Workspace implements Serializable{
 	 * @author Pierre Fromont Boissel
 	 * @see Participant
 	 */
-	public void addMember(Participant member) { members.add(member); }
+	public void addMember(Participant member, Role role) { members.put(member, role); }
 
 	/**
 	 * This method removes a member from the workspace.

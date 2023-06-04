@@ -210,7 +210,7 @@ public class ManagerController {
                 }
 
                 // Create the new workspace with the user-provided name
-                Workspace workspace = new Workspace(workspaceName);
+                Workspace workspace = new Workspace(workspaceName, TrelloMain.currentParticipant);
                 TrelloMain.workspaceManager.addWorkspace(workspace);
 
                 // Update the workspace combobox
@@ -246,6 +246,12 @@ public class ManagerController {
     private class DeleteButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant) != Role.ADMIN){
+                String message = "To delete a workspace, you must be an admin!";
+                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             // Delete the Workspace
             // Ask for confirmation
             ConfirmationDialog dialogController = new ConfirmationDialog();
@@ -330,6 +336,13 @@ public class ManagerController {
     private class ActionComboBoxListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            
+            if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant) != Role.ADMIN){
+                String message = "To modify the name, delete or add a new Board and add or remove a member, you must be an admin!";
+                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
+                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             switch (actionComboBox.getSelectedIndex()) {
                 case 0 -> {
                     // Change the name of the workspace
@@ -476,10 +489,18 @@ public class ManagerController {
                     // Check if the constructor was not cancelled by the user
                     if (!constructor.isCancelled()) {
                         // Get the emails of the existing participants in the selected workspace
-                        ArrayList<String> mails = new ArrayList<>();
+                        ArrayList<String> mailsOfWorkspace = new ArrayList<>();
                         for (Participant participant : TrelloMain.workspaceManager
                                 .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
-                            mails.add(participant.getMail());
+                            mailsOfWorkspace.add(participant.getMail());
+                        }
+
+                        // Get the main of the existing particpant in the whole app
+                        ArrayList<String> mailsOfApp = new ArrayList<>();
+                        for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+                            for (Participant participant : workspace.getMembers()) {
+                                mailsOfApp.add(participant.getMail());
+                            }
                         }
 
                         // Check if any of the fields is empty, display an error message and create a new constructor
@@ -488,19 +509,38 @@ public class ManagerController {
                                 constructor.getFieldsContent().get(2).equals("")) {
                             OptionPaneStyle errorMessage = new OptionPaneStyle();
                             errorMessage.showMessageDialog(null, "Please, can you fill all " +
-                                            "the fields!", "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                                            "the fields!", "Error", JOptionPane.ERROR_MESSAGE);
                             // Create a new constructor if any of the fields is empty
                             createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
                         }
                         // Check if the email already exists, display an error message and create a new constructor
-                        else if (mails.contains(constructor.getFieldsContent().get(0))) {
+                        else if (mailsOfWorkspace.contains(constructor.getFieldsContent().get(0))) {
                             OptionPaneStyle errorMessage = new OptionPaneStyle();
-                            errorMessage.showMessageDialog(null, "This email already exists!",
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                            errorMessage.showMessageDialog(null, "This email is already in this workspace!",
+                                                     "Error", JOptionPane.ERROR_MESSAGE);
                             // Create a new constructor if the email already exists
                             createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
+                        }
+                        // Add the already existing participant to the workspace by the email
+                        else if (mailsOfApp.contains(constructor.getFieldsContent().get(0))){
+                            for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+                                for (Participant participant : workspace.getMembers()) {
+                                    if (participant.getMail().equals(constructor.getFieldsContent().get(0))) {
+                                        System.out.println("Add the already existing participant to the workspace by the email");
+                                        Role role = null;
+                                        if (constructor.getComboBoxesContent().get(0).equals("Admin")) {
+                                            role = Role.ADMIN;
+                                        } else if (constructor.getComboBoxesContent().get(0).equals("Member")) {
+                                            role = Role.MEMBER;
+                                        } else if (constructor.getComboBoxesContent().get(0).equals("Observer")) {
+                                            role = Role.OBSERVER;
+                                        }
+                                        TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).addMember(participant, role);
+                                        workspaceInfoView.update();
+                                        return;
+                                    }
+                                }
+                            }
                         }
                         // Create a new participant with the provided information
                         else {
@@ -515,11 +555,11 @@ public class ManagerController {
 
                             Participant newParticipant = new Participant(constructor.getFieldsContent().get(1),
                                     constructor.getFieldsContent().get(2),
-                                    constructor.getFieldsContent().get(0), role);
+                                    constructor.getFieldsContent().get(0));
 
                             // Add the new participant to the workspace
                             TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
-                                    .addMember(newParticipant);
+                                    .addMember(newParticipant, role);
                             // Update the info panel
                             workspaceInfoView.update();
                         }

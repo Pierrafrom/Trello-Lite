@@ -43,7 +43,7 @@ public class TrelloMain {
     // PUBLIC STATIC VARIABLES
     // -----------------------------------------------------------------------------------------------------------------
     public static WorkspaceManager workspaceManager = new WorkspaceManager();
-    public static int selectedWorkspaceIndex = 0;
+    public static int selectedWorkspaceIndex;
     public static Participant currentParticipant;
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -105,6 +105,7 @@ public class TrelloMain {
             fileIn.close();
             System.out.println("Data has been successfully loaded.");
         } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Data has not been found.");
             e.printStackTrace();
         }
         return workspaceManager;
@@ -142,7 +143,7 @@ public class TrelloMain {
         workspaceManager = loadData();
         if (workspaceManager == null) {
             workspaceManager = new WorkspaceManager();
-        }
+        } 
 
         LoginView loginView = new LoginView();
         LoginController loginController = new LoginController(loginView, workspaceManager);
