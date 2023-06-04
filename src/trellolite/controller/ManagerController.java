@@ -13,6 +13,7 @@ import trellolite.style.ButtonStyle;
 import trellolite.style.ComboBoxStyle;
 import trellolite.style.OptionPaneStyle;
 import trellolite.view.ManagerView;
+import trellolite.view.ParticipantCreatorView;
 import trellolite.view.WorkspaceInfoView;
 import trellolite.view.WorkspaceView;
 
@@ -33,6 +34,8 @@ import java.util.ArrayList;
  * <br>
  *
  * @author Pierre Fromont Boissel
+ * @author Augustin Lecomte
+ * @author Glen Denoual
  * @see ManagerView
  * @see WorkspaceView
  * @see WorkspaceInfoView
@@ -51,14 +54,11 @@ public class ManagerController {
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
-    private ManagerView managerView;
-    private WorkspaceView workspaceView;
-    private WorkspaceInfoView workspaceInfoView;
-
-    private ComboBoxStyle workspaceComboBox;
-    private ButtonStyle NewButton;
-    private ButtonStyle DeleteButton;
-    private ComboBoxStyle actionComboBox;
+    private final ManagerView MANAGERVIEW;
+    private final WorkspaceView WORKSPACEVIEW;
+    private final WorkspaceInfoView WORKSPACEINFOVIEW;
+    private final ComboBoxStyle WORKSPACECOMBOBOX;
+    private final ComboBoxStyle ACTIONCOMBOBOX;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTOR
@@ -72,9 +72,9 @@ public class ManagerController {
      * <br>
      * <br>
      *
-     * @param managerView       the ManagerView object of the program
-     * @param workspaceView     the WorkspaceView object of the program
-     * @param workspaceInfoView the WorkspaceInfoView object of the program
+     * @param managerView,       the ManagerView object of the program
+     * @param workspaceView,     the WorkspaceView object of the program
+     * @param workspaceInfoView, the WorkspaceInfoView object of the program
      * @author Pierre Fromont Boissel
      * @see ManagerView
      * @see WorkspaceView
@@ -88,19 +88,19 @@ public class ManagerController {
     public ManagerController(ManagerView managerView, WorkspaceView
             workspaceView, WorkspaceInfoView workspaceInfoView) {
 
-        this.managerView = managerView;
-        this.workspaceView = workspaceView;
-        this.workspaceInfoView = workspaceInfoView;
+        this.MANAGERVIEW = managerView;
+        this.WORKSPACEVIEW = workspaceView;
+        this.WORKSPACEINFOVIEW = workspaceInfoView;
 
-        this.workspaceComboBox = managerView.getWorkspaceComboBox();
-        this.NewButton = managerView.getNewWorkspaceButton();
-        this.DeleteButton = managerView.getDeleteWorkspaceButton();
-        this.actionComboBox = managerView.getActionsComboBox();
+        this.WORKSPACECOMBOBOX = managerView.getWorkspaceComboBox();
+        ButtonStyle newButton = managerView.getNewWorkspaceButton();
+        ButtonStyle deleteButton = managerView.getDeleteWorkspaceButton();
+        this.ACTIONCOMBOBOX = managerView.getActionsComboBox();
 
-        this.NewButton.addActionListener(new NewButtonListener());
-        this.DeleteButton.addActionListener(new DeleteButtonListener());
-        this.workspaceComboBox.addActionListener(new WorkspaceComboBoxListener());
-        this.actionComboBox.addActionListener(new ActionComboBoxListener());
+        newButton.addActionListener(new NewButtonListener());
+        deleteButton.addActionListener(new DeleteButtonListener());
+        this.WORKSPACECOMBOBOX.addActionListener(new WorkspaceComboBoxListener());
+        this.ACTIONCOMBOBOX.addActionListener(new ActionComboBoxListener());
 
     }
 
@@ -136,7 +136,6 @@ public class ManagerController {
     private class NewButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Create a new workspace
             addWorkspace();
         }
 
@@ -159,11 +158,8 @@ public class ManagerController {
          * @see javax.swing.JOptionPane
          */
         private void addWorkspace() {
-            // Create a new OptionPaneStyle object to display dialogs with the same style
-            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
             // Prompt the user to enter the name of the new workspace
-            Object workspaceNameObj = optionPaneStyle.showInputDialog(null,
+            Object workspaceNameObj = OptionPaneStyle.showInputDialog(null,
                     "Enter the name of the new workspace:", "New workspace creation",
                     JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -175,11 +171,11 @@ public class ManagerController {
                 // While the workspace name is empty, ask the user to enter a new one
                 while (workspaceName.isEmpty()) {
                     // Display an error message indicating that the workspace name cannot be empty
-                    optionPaneStyle.showMessageDialog(null, "Workspace name cannot be empty!",
+                    OptionPaneStyle.showMessageDialog(null, "Workspace name cannot be empty!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the workspace name again
-                    workspaceNameObj = optionPaneStyle.showInputDialog(null,
+                    workspaceNameObj = OptionPaneStyle.showInputDialog(null,
                             "Enter the name of the new workspace:", "New workspace creation",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -188,7 +184,7 @@ public class ManagerController {
                 }
 
                 // Get the names of the existing workspaces
-                ArrayList<String> names = new ArrayList<String>();
+                ArrayList<String> names = new ArrayList<>();
                 for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
                     names.add(workspace.getName());
                 }
@@ -196,11 +192,11 @@ public class ManagerController {
                 // While the workspace name already exists, ask the user to enter a new one
                 while (names.contains(workspaceName)) {
                     // Display an error message indicating that the workspace name already exists
-                    optionPaneStyle.showMessageDialog(null, "Workspace name already exists!",
+                    OptionPaneStyle.showMessageDialog(null, "Workspace name already exists!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the workspace name again
-                    workspaceNameObj = optionPaneStyle.showInputDialog(null,
+                    workspaceNameObj = OptionPaneStyle.showInputDialog(null,
                             "Enter the name of the new workspace:", "New workspace creation",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -213,11 +209,11 @@ public class ManagerController {
                 TrelloMain.workspaceManager.addWorkspace(workspace);
 
                 // Update the workspace combobox
-                managerView.updateWorkspaceComboBox();
+                MANAGERVIEW.updateWorkspaceComboBox();
 
                 // Select the new workspace in the combobox
                 TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().size() - 1;
-                managerView.getWorkspaceComboBox().setSelectedIndex(TrelloMain.selectedWorkspaceIndex);
+                MANAGERVIEW.getWorkspaceComboBox().setSelectedIndex(TrelloMain.selectedWorkspaceIndex);
             }
         }
     }
@@ -234,6 +230,7 @@ public class ManagerController {
      * </p>
      *
      * @author Pierre Fromont Boissel
+     * @author Augustin Lecomte
      * @see ManagerView
      * @see WorkspaceView
      * @see WorkspaceInfoView
@@ -245,24 +242,26 @@ public class ManagerController {
     private class DeleteButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant) != Role.ADMIN){
+            // Check if the user is an admin
+            if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain
+                    .currentParticipant) != Role.ADMIN) {
                 String message = "To delete a workspace, you must be an admin!";
-                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                OptionPaneStyle.showMessageDialog(null, message, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
+            // check if the user still has another workspace
             int nbWorkspacesWithParticipant = 0;
-            for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
-                if(workspace.getMembers().contains(TrelloMain.currentParticipant)){
+            for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+                if (workspace.getMembers().contains(TrelloMain.currentParticipant)) {
                     nbWorkspacesWithParticipant += 1;
                 }
             }
 
-            if (nbWorkspacesWithParticipant == 1){
+            if (nbWorkspacesWithParticipant == 1) {
                 String message = "You can't delete your only workspace!";
-                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+                OptionPaneStyle.showMessageDialog(null, message, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -276,32 +275,24 @@ public class ManagerController {
 
             // If the user selected "Yes"
             if (result) {
-                /*
-                // Delete the Workspace
-                TrelloMain.workspaceManager.removeWorkspace(
-                        TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex));
-                // Update the workspace combobox
-                managerView.updateWorkspaceComboBox();
-                TrelloMain.selectedWorkspaceIndex -= 1;
-                managerView.getWorkspaceComboBox().setSelectedIndex(TrelloMain.selectedWorkspaceIndex);
-                */
                 Workspace targetWorkspace;
-                for(Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
-                    if(workspace.getName().equals(workspaceComboBox.getSelectedItem())){
+                for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+                    if (workspace.getName().equals(WORKSPACECOMBOBOX.getSelectedItem())) {
                         targetWorkspace = workspace;
                         TrelloMain.workspaceManager.removeWorkspace(targetWorkspace);
                         break;
                     }
                 }
-                for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
-                    if(workspace.getMembers().contains(TrelloMain.currentParticipant)){
-                        TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().indexOf(workspace);
+                for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+                    if (workspace.getMembers().contains(TrelloMain.currentParticipant)) {
+                        TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().
+                                indexOf(workspace);
                         break;
                     }
                 }
-                workspaceInfoView.update();
-                workspaceView.update();
-                managerView.updateWorkspaceComboBox();
+                WORKSPACEINFOVIEW.update();
+                WORKSPACEVIEW.update();
+                MANAGERVIEW.updateWorkspaceComboBox();
             }
         }
     }
@@ -319,6 +310,7 @@ public class ManagerController {
      * </p>
      *
      * @author Pierre Fromont Boissel
+     * @author Augustin Lecomte
      * @see ManagerView
      * @see WorkspaceView
      * @see WorkspaceInfoView
@@ -331,16 +323,17 @@ public class ManagerController {
         @Override
         public void actionPerformed(ActionEvent e) {
             Workspace targetWorkspace;
-
-            for(Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()){
-                if(workspace.getName().equals(workspaceComboBox.getSelectedItem())){
+            // Get the selected workspace in the combobox
+            for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
+                if (workspace.getName().equals(WORKSPACECOMBOBOX.getSelectedItem())) {
                     targetWorkspace = workspace;
-                    TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().indexOf(targetWorkspace);
-                    workspaceView.changeWorkspace(targetWorkspace);
+                    TrelloMain.selectedWorkspaceIndex = TrelloMain.workspaceManager.getWorkspaces().
+                            indexOf(targetWorkspace);
+                    WORKSPACEVIEW.changeWorkspace(targetWorkspace);
                     break;
                 }
             }
-            workspaceInfoView.update();   
+            WORKSPACEINFOVIEW.update();
         }
     }
 
@@ -375,22 +368,32 @@ public class ManagerController {
      * @see java.lang.String
      */
     private class ActionComboBoxListener implements ActionListener {
+        // -------------------------------------------------------------------------------------------------------------
+        // CONSTANTS
+        // -------------------------------------------------------------------------------------------------------------
+
+        private static final int CHANGE_NAME = 0;
+        private static final int ADD_MEMBER = 1;
+        private static final int REMOVE_MEMBER = 2;
+        private static final int NEW_BOARD = 3;
+
+        // -------------------------------------------------------------------------------------------------------------
+        // ACTION PERFORMED
+        // -------------------------------------------------------------------------------------------------------------
         @Override
         public void actionPerformed(ActionEvent e) {
-            
-            if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant) != Role.ADMIN){
-                String message = "To modify a wokspace and its members, you must be an admin!";
-                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+            // Check if the user is an admin
+            if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.
+                    currentParticipant) != Role.ADMIN) {
+                String message = "To modify a board and its members, you must be an admin!";
+                OptionPaneStyle.showMessageDialog(null, message, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            switch (actionComboBox.getSelectedIndex()) {
-                case 0 -> {
-                    // Change the name of the workspace
-                    changeName();
-                }
-                case 1 -> {
-                    // Add a Member
+            // Handle the actions
+            switch (ACTIONCOMBOBOX.getSelectedIndex()) {
+                case CHANGE_NAME -> changeName();
+                case ADD_MEMBER -> {
                     // fields
                     ArrayList<String> fields = new ArrayList<>();
                     fields.add("email :");
@@ -407,20 +410,14 @@ public class ManagerController {
                     comboBoxesLabels.add("Role :");
                     createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
                 }
-                case 2 -> {
-                    // Remove a Member
-                    removeMember();
-                }
-                case 3 -> {
-                    // Add a Board
-                    createNewBoard();
-                }
+                case REMOVE_MEMBER -> removeMember();
+                case NEW_BOARD -> createNewBoard();
             }
         }
 
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
         // METHODS
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
 
         /**
          * This method creates a new board and adds it to the selected workspace.
@@ -428,19 +425,16 @@ public class ManagerController {
          * It prompts the user to enter the name of the new board.
          * Then it creates a new board and adds it to the selected workspace.
          * </p>
-         * 
+         *
          * @author Pierre Fromont Boissel
          * @see ManagerView
          * @see trellolite.model
          * @see trellolite.style
          * @see javax.swing.JOptionPane
          */
-        private void createNewBoard(){
-            // Create a new OptionPaneStyle object to display dialogs with the same style
-            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
+        private void createNewBoard() {
             // Prompt the user to enter the name of the new board
-            Object boardNameObj = optionPaneStyle.showInputDialog(null,
+            Object boardNameObj = OptionPaneStyle.showInputDialog(null,
                     "Enter the name of the new Board:", "New Board creation",
                     JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -452,11 +446,11 @@ public class ManagerController {
                 // While the board name is empty, ask the user to enter a new one
                 while (boardName.isEmpty()) {
                     // Display an error message indicating that the board name cannot be empty
-                    optionPaneStyle.showMessageDialog(null, "Board name cannot be empty!",
+                    OptionPaneStyle.showMessageDialog(null, "Board name cannot be empty!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the board name again
-                    boardNameObj = optionPaneStyle.showInputDialog(null,
+                    boardNameObj = OptionPaneStyle.showInputDialog(null,
                             "Enter the name of the new board:", "New board creation",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -465,19 +459,20 @@ public class ManagerController {
                 }
 
                 // Get the names of the existing boards
-                ArrayList<String> names = new ArrayList<String>();
-                for (Board board : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getBoards()) {
+                ArrayList<String> names = new ArrayList<>();
+                for (Board board : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
+                        .getBoards()) {
                     names.add(board.getName());
                 }
 
                 // While the board name already exists, ask the user to enter a new one
                 while (names.contains(boardName)) {
                     // Display an error message indicating that the board name already exists
-                    optionPaneStyle.showMessageDialog(null, "Board name already exists!",
+                    OptionPaneStyle.showMessageDialog(null, "Board name already exists!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the board name again
-                    boardNameObj = optionPaneStyle.showInputDialog(null,
+                    boardNameObj = OptionPaneStyle.showInputDialog(null,
                             "Enter the name of the new board:", "New board creation",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -490,8 +485,8 @@ public class ManagerController {
                 TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).addBoard(board);
 
                 // Update the workspace info view and the workspace view
-                workspaceInfoView.update();
-                workspaceView.update();
+                WORKSPACEINFOVIEW.update();
+                WORKSPACEVIEW.update();
 
             }
         }
@@ -506,7 +501,8 @@ public class ManagerController {
          * @param comboBoxes       the combo boxes of the controller window
          * @param comboBoxesLabels the labels of the combo boxes of the controller window
          * @author Pierre Fromont Boissel
-         * @see ParticipantConstructor
+         * @author Augustin Lecomte
+         * @see ParticipantCreatorView
          * @see trellolite.style
          * @see java.awt.event.WindowAdapter
          * @see java.awt.event.WindowEvent
@@ -516,14 +512,14 @@ public class ManagerController {
         public void createNewParticipantController(ArrayList<String> fields, ArrayList<ComboBoxStyle> comboBoxes,
                                                    ArrayList<String> comboBoxesLabels) {
             // Create a new ParticipantConstructor object for the participant constructor
-            ParticipantConstructor constructor = new ParticipantConstructor("Add a participant",
+            ParticipantCreatorView constructor = new ParticipantCreatorView("Add a participant",
                     400, 300, fields, comboBoxes, comboBoxesLabels);
 
             // Add a WindowListener to the constructor window
             constructor.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    // Check if the constructor was not cancelled by the user
+                    // Check if the user did not cancel the constructor
                     if (!constructor.isCancelled()) {
                         // Get the emails of the existing participants in the selected workspace
                         ArrayList<String> mailsOfWorkspace = new ArrayList<>();
@@ -532,7 +528,7 @@ public class ManagerController {
                             mailsOfWorkspace.add(participant.getMail());
                         }
 
-                        // Get the main of the existing particpant in the whole app
+                        // Get the main of the existing participant in the whole app
                         ArrayList<String> mailsOfApp = new ArrayList<>();
                         for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
                             for (Participant participant : workspace.getMembers()) {
@@ -544,26 +540,25 @@ public class ManagerController {
                         if (constructor.getFieldsContent().get(0).equals("") ||
                                 constructor.getFieldsContent().get(1).equals("") ||
                                 constructor.getFieldsContent().get(2).equals("")) {
-                            OptionPaneStyle errorMessage = new OptionPaneStyle();
-                            errorMessage.showMessageDialog(null, "Please, can you fill all " +
-                                            "the fields!", "Error", JOptionPane.ERROR_MESSAGE);
+                            OptionPaneStyle.showMessageDialog(null, "Please, " +
+                                    "can you fill all " + "the fields!", "Error", JOptionPane.ERROR_MESSAGE);
                             // Create a new constructor if any of the fields is empty
                             createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
                         }
                         // Check if the email already exists, display an error message and create a new constructor
                         else if (mailsOfWorkspace.contains(constructor.getFieldsContent().get(0))) {
-                            OptionPaneStyle errorMessage = new OptionPaneStyle();
-                            errorMessage.showMessageDialog(null, "This email is already in this workspace!",
-                                                     "Error", JOptionPane.ERROR_MESSAGE);
+                            OptionPaneStyle.showMessageDialog(null, "This email " +
+                                    "is already in " + "this workspace!", "Error", JOptionPane.ERROR_MESSAGE);
                             // Create a new constructor if the email already exists
                             createNewParticipantController(fields, comboBoxes, comboBoxesLabels);
                         }
                         // Add the already existing participant to the workspace by the email
-                        else if (mailsOfApp.contains(constructor.getFieldsContent().get(0))){
+                        else if (mailsOfApp.contains(constructor.getFieldsContent().get(0))) {
                             for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
                                 for (Participant participant : workspace.getMembers()) {
                                     if (participant.getMail().equals(constructor.getFieldsContent().get(0))) {
-                                        System.out.println("Add the already existing participant to the workspace by the email");
+                                        System.out.println("Add the already existing participant to the workspace by " +
+                                                "the email");
                                         Role role = null;
                                         if (constructor.getComboBoxesContent().get(0).equals("Admin")) {
                                             role = Role.ADMIN;
@@ -572,8 +567,9 @@ public class ManagerController {
                                         } else if (constructor.getComboBoxesContent().get(0).equals("Observer")) {
                                             role = Role.OBSERVER;
                                         }
-                                        TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).addMember(participant, role);
-                                        workspaceInfoView.update();
+                                        TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).
+                                                addMember(participant, role);
+                                        WORKSPACEINFOVIEW.update();
                                         return;
                                     }
                                 }
@@ -589,7 +585,7 @@ public class ManagerController {
                             } else if (constructor.getComboBoxesContent().get(0).equals("Observer")) {
                                 role = Role.OBSERVER;
                             }
-                            
+
                             // print data
                             System.out.println("firstname: " + constructor.getFieldsContent().get(1));
                             System.out.println("lastname: " + constructor.getFieldsContent().get(2));
@@ -606,50 +602,63 @@ public class ManagerController {
                             TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
                                     .addMember(newParticipant, role);
                             // Update the info panel
-                            workspaceInfoView.update();
+                            WORKSPACEINFOVIEW.update();
                         }
                     }
                 }
             });
         }
 
-        private void removeMember(){
-            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
-             // Prompt the user to enter the name of the new member
-            Object memberMailObject = optionPaneStyle.showInputDialog(null,
-                "Enter the mail of the member", "Remove a Member",
-                JOptionPane.INFORMATION_MESSAGE, null, null, null);
+        /**
+         * This method allows removing a member from the selected workspace.
+         *
+         * @author Pierre Fromont Boissel
+         * @author Augustin Lecomte
+         * @see WorkspaceInfoView
+         * @see trellolite.style
+         * @see javax.swing.JOptionPane
+         * @see java.lang.String
+         * @see java.lang.Object
+         * @see java.util.ArrayList
+         * @see trellolite.model.Participant
+         * @see trellolite.model.Workspace
+         */
+        private void removeMember() {
+            // Prompt the user to enter the name of the new member
+            Object memberMailObject = OptionPaneStyle.showInputDialog(null,
+                    "Enter the mail of the member", "Remove a Member",
+                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
             if (memberMailObject != null) {
                 // Convert the object to a string and trim leading and trailing spaces
                 String memberMail = memberMailObject.toString().trim();
-                
+
                 // While the member mail is empty, ask the user to enter a new one
                 while (memberMail.isEmpty()) {
                     // Display an error message indicating that the member mail already exists
-                    optionPaneStyle.showMessageDialog(null, "Enter mail ",
+                    OptionPaneStyle.showMessageDialog(null, "Enter mail ",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
-                     // Prompt the user to enter the name of the member to be deleted
-                    memberMailObject = optionPaneStyle.showInputDialog(null, "Enter the mail of the member",
-                            "Remove a Member",
-                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                    // Prompt the user to enter the name of the member to be deleted
+                    memberMailObject = OptionPaneStyle.showInputDialog(null, "Enter the mail " +
+                                    "of the member", "Remove a Member", JOptionPane.INFORMATION_MESSAGE, null,
+                            null, null);
 
                     memberMail = memberMailObject.toString().trim();
                 }
 
-                ArrayList<String> mails = new ArrayList<String>();
+                ArrayList<String> mails = new ArrayList<>();
                 for (Participant member : TrelloMain.workspaceManager
                         .getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers()) {
                     mails.add(member.getMail());
                 }
-                // While the member  doesn't exists, ask the user to enter a new one
+                // While the member doesn't exist, ask the user to enter a new one
                 while (!mails.contains(memberMail)) {
-                    optionPaneStyle.showMessageDialog(null, "Member mail doesn't exists!",
+                    OptionPaneStyle.showMessageDialog(null, "Member mail doesn't exists!",
                             "Error", JOptionPane.ERROR_MESSAGE);
                     // Prompt the user to enter the name of the new board
-                    memberMailObject = optionPaneStyle.showInputDialog(null, "Enter the mail of the member",
+                    memberMailObject = OptionPaneStyle.showInputDialog(null, "Enter the mail" +
+                                    " of the member",
                             "Remove a Member",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -667,17 +676,26 @@ public class ManagerController {
 
                 TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
                         .removeMember(memberToRemove);
-                
+
                 // Update the workspace info view
-                workspaceInfoView.update();
+                WORKSPACEINFOVIEW.update();
             }
         }
-        
-        private void changeName(){
-            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
 
+        /**
+         * This method allows changing the name of the selected workspace.
+         *
+         * @author Pierre Fromont Boissel
+         * @see WorkspaceInfoView
+         * @see trellolite.style
+         * @see javax.swing.JOptionPane
+         * @see java.lang.String
+         * @see java.lang.Object
+         * @see trellolite.model.Workspace
+         */
+        private void changeName() {
             // Prompt the user to enter the new name of the workspace
-            Object workspaceNameObject = optionPaneStyle.showInputDialog(null,
+            Object workspaceNameObject = OptionPaneStyle.showInputDialog(null,
                     "Enter the new name of the workspace", "Change the name of the workspace",
                     JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -688,19 +706,19 @@ public class ManagerController {
                 // While the workspace name is empty, ask the user to enter a new one
                 while (workspaceName.isEmpty()) {
                     // Display an error message indicating that the workspace name already exists
-                    optionPaneStyle.showMessageDialog(null, "Enter the new name of the workspace",
-                            "Error", JOptionPane.ERROR_MESSAGE);
+                    OptionPaneStyle.showMessageDialog(null, "Enter the new name of the " +
+                            "workspace", "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the new name of the workspace
-                    workspaceNameObject = optionPaneStyle.showInputDialog(null,
+                    workspaceNameObject = OptionPaneStyle.showInputDialog(null,
                             "Enter the new name of the workspace", "Change the name of the workspace",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
                     workspaceName = workspaceNameObject.toString().trim();
                 }
 
-                // get workspaces names
-                ArrayList<String> workspacesNames = new ArrayList<String>();
+                // get workspace names
+                ArrayList<String> workspacesNames = new ArrayList<>();
                 for (Workspace workspace : TrelloMain.workspaceManager.getWorkspaces()) {
                     workspacesNames.add(workspace.getName());
                 }
@@ -708,11 +726,12 @@ public class ManagerController {
                 // While the workspace name already exists, ask the user to enter a new one
                 while (workspacesNames.contains(workspaceName)) {
                     // Display an error message indicating that the workspace name already exists
-                    optionPaneStyle.showMessageDialog(null, "This workspace name already exists!",
+                    OptionPaneStyle.showMessageDialog(null, "This workspace name already " +
+                                    "exists!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the new name of the workspace
-                    workspaceNameObject = optionPaneStyle.showInputDialog(null,
+                    workspaceNameObject = OptionPaneStyle.showInputDialog(null,
                             "Enter the new name of the workspace", "Change the name of the workspace",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -724,9 +743,9 @@ public class ManagerController {
                         .setName(workspaceName);
 
                 // Update the workspace info view
-                workspaceInfoView.update();
+                WORKSPACEINFOVIEW.update();
                 // update the combo box
-                managerView.updateWorkspaceComboBox();
+                MANAGERVIEW.updateWorkspaceComboBox();
             }
         }
     }

@@ -2,11 +2,6 @@ package trellolite.view;
 
 import trellolite.TrelloMain;
 import trellolite.controller.BoardController;
-
-// ---------------------------------------------------------------------------------------------------------------------
-// IMPORTS
-// ---------------------------------------------------------------------------------------------------------------------
-
 import trellolite.model.Board;
 import trellolite.style.*;
 
@@ -29,23 +24,25 @@ import java.awt.*;
  */
 public class BoardView extends PanelStyle {
 
-    private final String[] actions = { "Change the name of the board", "Add a list", "Delete the board" };
+    private final String[] actions = {"Change the name of the board", "Add a list", "Delete the board"};
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
     private Board board;
     private ComboBoxStyle actionsComboBox;
-    private final PanelStyle topPanel;
-    private WorkspaceView workspaceView;
+    private final PanelStyle TOPPANEL;
+    private final WorkspaceView WORKSPACEVIEW;
+
+    private final WorkspaceInfoView WORKSPACEINFOVIEW;
 
     // -----------------------------------------------------------------------------------------------------------------
     // GETTERS
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * This method returns the actions combo box.
+     * This method returns the action combo box.
      *
-     * @return ComboBoxStyle, the actions combo box.
+     * @return ComboBoxStyle, the action combo box.
      * @author Pierre Fromont Boissel
      * @see ComboBoxStyle
      * @see trellolite.model.Board
@@ -61,11 +58,10 @@ public class BoardView extends PanelStyle {
 
     /**
      * This constructor is used to create a BoardView.
-     * 
-     * @param board         , the board to display.
-     * @param workspaceView , the workspace view that contains the board view.
+     *
+     * @param board         the board to display.
+     * @param workspaceView the workspace view that contains the board view.
      *                      It is used to create the controller.
-     * 
      * @see trellolite.model.Board
      * @see trellolite.view.WorkspaceView
      * @see trellolite.view.BoardView
@@ -74,19 +70,20 @@ public class BoardView extends PanelStyle {
      * @see trellolite.style.OptionPaneStyle
      * @see trellolite.controller.BoardController
      */
-    public BoardView(Board board, WorkspaceView workspaceView) {
+    public BoardView(Board board, WorkspaceView workspaceView, WorkspaceInfoView workspaceInfoView) {
         super(new BorderLayout());
         this.board = board;
-        this.workspaceView = workspaceView;
+        this.WORKSPACEVIEW = workspaceView;
+        this.WORKSPACEINFOVIEW = workspaceInfoView;
 
         // Create the top Panel
-        topPanel = new PanelStyle(1200, 30, new BorderLayout());
+        TOPPANEL = new PanelStyle(1200, 30, new BorderLayout());
         // Create the title Panel
-        topPanel.add(createTitlePanel(), BorderLayout.CENTER);
+        TOPPANEL.add(createTitlePanel(), BorderLayout.CENTER);
         // Create the actions Panel
-        topPanel.add(createActionsPanel(), BorderLayout.EAST);
+        TOPPANEL.add(createActionsPanel(), BorderLayout.EAST);
         // Add the top Panel to the content Panel
-        add(topPanel, BorderLayout.NORTH);
+        add(TOPPANEL, BorderLayout.NORTH);
         // create the content Panel
         createContentPanel();
     }
@@ -109,13 +106,13 @@ public class BoardView extends PanelStyle {
         removeAll(); // Supprime tous les composants de BoardView
 
         // Recrée les composants
-        topPanel.removeAll();
-        topPanel.add(createTitlePanel(), BorderLayout.CENTER);
-        topPanel.add(createActionsPanel(), BorderLayout.EAST);
+        TOPPANEL.removeAll();
+        TOPPANEL.add(createTitlePanel(), BorderLayout.CENTER);
+        TOPPANEL.add(createActionsPanel(), BorderLayout.EAST);
         createContentPanel();
 
         // Ajoute les composants mis à jour à BoardView
-        add(topPanel, BorderLayout.NORTH);
+        add(TOPPANEL, BorderLayout.NORTH);
         revalidate(); // Revalide le panneau pour mettre à jour la mise en page
         repaint(); // Redessine le panneau pour refléter les changements
     }
@@ -150,7 +147,7 @@ public class BoardView extends PanelStyle {
         actionsComboBox = new ComboBoxStyle(actions, 240, 30, 14);
         actionsPanel.add(actionsComboBox, BorderLayout.CENTER);
         new BoardController(TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex),
-                board, workspaceView, this);
+                board, WORKSPACEVIEW, this, WORKSPACEINFOVIEW);
         return actionsPanel;
     }
 

@@ -24,11 +24,7 @@ public interface MyStyle {
     Color BUTTON_COLOR = new Color(79, 84, 105);
     Color BUTTON_BORDER_COLOR = new Color(96, 102, 126);
     Color BUTTON_HOVER = new Color(121, 128, 157);
-    Color TEXT_ACCENTUATION = new Color(174, 129, 255);
     Color COMPONENT_ACCENTUATION = new Color(0, 174, 239);
-    Color SUCCESS_COLOR = new Color(76, 175, 80);
-    Color ERROR_COLOR = new Color(244, 67, 54);
-    Color WARNING_COLOR = new Color(255, 193, 7);
     Color NEUTRAL_COLOR = new Color(200, 200, 200);
 
     // -----------------------------------------------------------------------------------------------------------------

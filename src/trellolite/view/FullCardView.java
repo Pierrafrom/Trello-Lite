@@ -14,11 +14,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * This class is the view of a card.
+ * This class is the view of a CARD.
  * <br>
  * This class extends JFrame.
  * <br>
- * It shows the name, the description, the due date and the labels of a card.
+ * It shows the name, the description, the due date and the labels of a CARD.
  *
  * @author Glen Denoual
  * @see Card
@@ -38,9 +38,7 @@ public class FullCardView extends JFrame {
     // -----------------------------------------------------------------------------------------------------------------
     private ButtonStyle modifyButton;
     private ButtonStyle deleteButton;
-    private Card card;
-    private CardListView cardListView;
-    private CardList cardList;
+    private final Card CARD;
 
     // -----------------------------------------------------------------------------------------------------------------
     // GETTERS
@@ -65,9 +63,9 @@ public class FullCardView extends JFrame {
      * This constructor creates a JFrame with a title, a size, a default close operation, a visibility, a resizable
      * status and a location.
      * <br>
-     * It displays the card in a JFrame.
+     * It displays the CARD in a JFrame.
      *
-     * @param card, Card, the card to display
+     * @param card, Card, the CARD to display
      * @author Glen Denoual
      * @see Card
      * @see JFrame
@@ -85,15 +83,13 @@ public class FullCardView extends JFrame {
      */
     public FullCardView(Card card, CardListView cardListView, CardList cardList) {
         super(card.getName());
-        setSize(500, 500);
+        setSize(500, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);
 
-        this.card = card;
-        this.cardListView = cardListView;
-        this.cardList = cardList;
+        this.CARD = card;
 
         // main panel
         PanelStyle mainPanel = new PanelStyle(500, 500, new BorderLayout());
@@ -116,19 +112,6 @@ public class FullCardView extends JFrame {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * This method updates the card.
-     *
-     * @param card, Card, the card to update
-     * @author Glen Denoual
-     * @see Card
-     * @see FullCardView
-     */
-    public void update(Card card) {
-        this.dispose();
-        new FullCardView(card, cardListView, cardList);
-    }
-
-    /**
      * This method creates the title panel.
      *
      * @return PanelStyle, the title panel
@@ -141,7 +124,7 @@ public class FullCardView extends JFrame {
      */
     private PanelStyle creatTitlePanel() {
         PanelStyle titlePanel = new PanelStyle(500, 50, new BorderLayout());
-        LabelStyle titleLabel = new LabelStyle(card.getName(), TextType.TITLE, SwingConstants.CENTER);
+        LabelStyle titleLabel = new LabelStyle(CARD.getName(), TextType.TITLE, SwingConstants.CENTER);
         titlePanel.setBorder(BorderFactory.createLineBorder(MyStyle.BORDER_COLOR, 2));
         titlePanel.add(titleLabel, BorderLayout.CENTER);
         return titlePanel;
@@ -164,14 +147,14 @@ public class FullCardView extends JFrame {
      */
     private PanelStyle createContentPanel() {
         // content panel
-        PanelStyle contentPanel = new PanelStyle(500, 400, new GridLayout(2, 2));
+        PanelStyle contentPanel = new PanelStyle(500, 500, new GridLayout(3, 2));
         //description
         LabelStyle descriptionLabel = new LabelStyle("Description :", TextType.TEXT);
         descriptionLabel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2,
                 MyStyle.BORDER_COLOR));
         contentPanel.add(descriptionLabel);
         // description content
-        JTextArea descriptionContentTextArea = new JTextArea(card.getDescription());
+        JTextArea descriptionContentTextArea = new JTextArea(CARD.getDescription());
         descriptionContentTextArea.setEditable(false); // set textArea non-editable
         descriptionContentTextArea.setLineWrap(true); // set word wrap
         descriptionContentTextArea.setWrapStyleWord(true); // wrap line at word boundary
@@ -194,14 +177,33 @@ public class FullCardView extends JFrame {
                 MyStyle.BORDER_COLOR));
         contentPanel.add(participantsLabel);
         // Participants content
-        LabelStyle participantsContentLabel = new LabelStyle(card.showParticipants(), TextType.TEXT);
+        LabelStyle participantsContentLabel = new LabelStyle(CARD.showParticipants(), TextType.TEXT);
         participantsContentLabel.setOpaque(true);
         participantsContentLabel.setForeground(MyStyle.BACKGROUND_COLOR);
         participantsContentLabel.setBackground(MyStyle.NEUTRAL_COLOR);
         participantsContentLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2,
                 MyStyle.BORDER_COLOR));
         // add it to a scrollPane
-        contentPanel.add(participantsContentLabel);
+        ScrollPaneStyle participantContentScrollPane = new ScrollPaneStyle(participantsContentLabel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        contentPanel.add(participantContentScrollPane);
+        // link cards
+        LabelStyle linkCardsLabel = new LabelStyle("Linked cards :", TextType.TEXT);
+        linkCardsLabel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2,
+                MyStyle.BORDER_COLOR));
+        contentPanel.add(linkCardsLabel);
+        // link cards content
+        LabelStyle linkCardsContentLabel = new LabelStyle(CARD.showLinkedCards(), TextType.TEXT);
+        linkCardsContentLabel.setOpaque(true);
+        linkCardsContentLabel.setForeground(MyStyle.BACKGROUND_COLOR);
+        linkCardsContentLabel.setBackground(MyStyle.NEUTRAL_COLOR);
+        linkCardsContentLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 2,
+                MyStyle.BORDER_COLOR));
+        // add it to a scrollPane
+        ScrollPaneStyle linkCardsContentScrollPane = new ScrollPaneStyle(linkCardsContentLabel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        contentPanel.add(linkCardsContentScrollPane);
+
         return contentPanel;
     }
 
@@ -220,7 +222,7 @@ public class FullCardView extends JFrame {
     private PanelStyle createBottomPanel() {
         PanelStyle bottomPanel = new PanelStyle(500, 50, new GridLayout(1, 2));
         // due date
-        String dueDate = card.getDueDate() == null ? "No due date" : "Due date : " + card.getDueDate().toString();
+        String dueDate = CARD.getDueDate() == null ? "No due date" : "Due date : " + CARD.getDueDate().toString();
         LabelStyle dueDateLabel = new LabelStyle(dueDate, TextType.TEXT);
         dueDateLabel.setBorder(BorderFactory.createMatteBorder(0, 2, 2, 2,
                 MyStyle.BORDER_COLOR));
@@ -230,28 +232,9 @@ public class FullCardView extends JFrame {
         modifyButton = new ButtonStyle("Modify", 125, 50);
         buttonPanel.add(modifyButton);
         // delete button
-        deleteButton = new ButtonStyle("Delete", 125, 50);
+        deleteButton = new ButtonStyle("End", 125, 50);
         buttonPanel.add(deleteButton);
         bottomPanel.add(buttonPanel);
         return bottomPanel;
     }
-
-    /* test for the card view
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Card card = new Card("test");
-            String descr = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eleifend tristique " +
-                    "libero, ac finibus nisi porttitor vitae. Suspendisse consectetur eleifend risus, id mattis " +
-                    "nisi hendrerit vitae. Sed sagittis interdum ultricies. Nullam condimentum nisl a ex aliquam, " +
-                    "sit amet maximus nunc consequat. Nullam quis augue vestibulum, consequat urna sed, consequat " +
-                    "purus. Sed efficitur, enim ut fringilla fringilla, ligula libero faucibus velit, nec blandit " +
-                    "lacus enim vel quam. Nullam id arcu tincidunt, mollis enim eget, suscipit odio. Curabitur sed" +
-                    " posuere ligula.";
-            card.setDescription(descr);
-            card.addMember(new Participant("test", "test", "test@gmail.com", Role.MEMBER));
-            card.addMember(new Participant("test1", "test1", "test1@gmail.com", Role.MEMBER));
-            card.addMember(new Participant("test2", "test2", "test2@gmail.com", Role.MEMBER));
-            FullCardView fullCardView = new FullCardView(card);
-        });
-    }*/
 }

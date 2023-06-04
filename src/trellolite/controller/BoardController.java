@@ -1,11 +1,10 @@
 package trellolite.controller;
 
-import trellolite.TrelloMain;
-
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
+import trellolite.TrelloMain;
 import trellolite.model.Board;
 import trellolite.model.CardList;
 import trellolite.model.Role;
@@ -14,13 +13,13 @@ import trellolite.style.ComboBoxStyle;
 import trellolite.style.OptionPaneStyle;
 import trellolite.view.BoardView;
 import trellolite.view.ManagerView;
+import trellolite.view.WorkspaceInfoView;
 import trellolite.view.WorkspaceView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 /**
  * This class is the controller of the Board class.
@@ -28,6 +27,11 @@ import javax.swing.JOptionPane;
  * @author Pierre Fromont Boissel
  * @author Roxane Zaharia
  * @author Augustin Lecomte
+ * @see Board
+ * @see BoardView
+ * @see Workspace
+ * @see WorkspaceView
+ * @see WorkspaceInfoView
  */
 public class BoardController {
 
@@ -35,24 +39,37 @@ public class BoardController {
     // ATTRIBUTES
     // -----------------------------------------------------------------------------------------------------------------
 
-    Workspace workspace;
-    Board board;
-    WorkspaceView workspaceView;
-    BoardView boardView;
+    private final Workspace WORKSPACE;
+    private final Board BOARD;
+    private final WorkspaceView WORKSPACEVIEW;
+    private final BoardView BOARDVIEW;
+    private final WorkspaceInfoView WORKSPACEINFOVIEW;
 
-    ComboBoxStyle actionComboBox;
+    private final ComboBoxStyle ACTIONCOMBOBOX;
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTOR
     // -----------------------------------------------------------------------------------------------------------------
-    public BoardController(Workspace workspace, Board board, WorkspaceView workspaceView, BoardView boardView) {
-        this.workspace = workspace;
-        this.board = board;
-        this.workspaceView = workspaceView;
-        this.boardView = boardView;
 
-        actionComboBox = boardView.getActionsComboBox();
-        actionComboBox.addActionListener(new ActionComboBoxListener());
+    /**
+     * Constructor of the BoardController class
+     *
+     * @param workspace,         the workspace that contains the board
+     * @param board,             the board to control
+     * @param workspaceView,     the workspace view that contains the board view
+     * @param boardView,         the board view to control
+     * @param workspaceInfoView, the workspace info view that is used to display the board info
+     */
+    public BoardController(Workspace workspace, Board board, WorkspaceView workspaceView, BoardView boardView,
+                           WorkspaceInfoView workspaceInfoView) {
+        WORKSPACE = workspace;
+        BOARD = board;
+        WORKSPACEVIEW = workspaceView;
+        BOARDVIEW = boardView;
+        WORKSPACEINFOVIEW = workspaceInfoView;
+
+        ACTIONCOMBOBOX = boardView.getActionsComboBox();
+        ACTIONCOMBOBOX.addActionListener(new ActionComboBoxListener());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -60,69 +77,67 @@ public class BoardController {
     // -----------------------------------------------------------------------------------------------------------------
 
     /**
-     * Listener for the actionComboBox
+     * Listener for the ACTIONCOMBOBOX
      *
      * @author Pierre Fromont Boissel
      * @author Augustin Lecomte
+     * @see BoardController
+     * @see BoardView
+     * @see Workspace
+     * @see WorkspaceView
+     * @see WorkspaceInfoView
      */
     private class ActionComboBoxListener implements ActionListener {
 
         // ---------------------------------------------------------------------------------------------------------
         // CONSTANTS
         // ---------------------------------------------------------------------------------------------------------
-
         final int RENAME_BOARD = 0;
         final int ADD_NEW_LIST = 1;
         final int DELETE_BOARD = 2;
 
         /**
-         * Action performed when the user selects an action in the actionComboBox
+         * Action performed when the user selects an action in the ACTIONCOMBOBOX
          *
          * @param e ,ActionEvent, the event
          * @author Pierre Fromont Boissel
          * @author Augustin Lecomte
+         * @see BoardController
+         * @see BoardView
+         * @see Workspace
+         * @see WorkspaceView
          */
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            // ---------------------------------------------------------------------------------------------------------
-            // CONSTANTS
-            // ---------------------------------------------------------------------------------------------------------
-
-            final int RENAME_BOARD = 0;
-            final int ADD_NEW_LIST = 1;
-            final int DELETE_BOARD = 2;
-            
-            Role role = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole(TrelloMain.currentParticipant);
-            if (role == Role.OBSERVER){
-                String message = "Sorry, observers can not modify the workspace in any way.";
-                OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-                optionPaneStyle.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+            // Check if the user is allowed to modify the BOARD
+            Role role = TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getRole
+                    (TrelloMain.currentParticipant);
+            if (role == Role.OBSERVER) {
+                String message = "Sorry, observers can not modify the WORKSPACE in any way.";
+                OptionPaneStyle.showMessageDialog(null, message, "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
-                }
+            }
 
-            // Switch between the different actions of the actionComboBox
-            switch (actionComboBox.getSelectedIndex()) {
+            // Switch between the different actions of the ACTIONCOMBOBOX
+            switch (ACTIONCOMBOBOX.getSelectedIndex()) {
                 case RENAME_BOARD -> {
-                    // Rename the Board
-
                     // Instantiate the variables
-                    boolean empty = false;
-                    boolean used = false;
+                    boolean empty;
+                    boolean used;
                     String alert;
                     String titleAlert = "Invalid name";
 
-                    // Prompt the user to enter the new name of the board
-                    OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
-                    String message = "Enter the new name of the board:";
+                    // Prompt the user to enter the new name of the BOARD
+                    String message = "Enter the new name of the BOARD:";
                     String title = "Board name modification";
-                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null, message, title,
+                    Object ChangeBoardNameObj = OptionPaneStyle.showInputDialog(null, message, title,
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
                     String newName = ChangeBoardNameObj.toString().trim();
 
                     // Rename the Board model only if the name is not empty and unique in the
-                    // workspace
+                    // WORKSPACE
                     // Else, it displays an error message
                     empty = newName.isEmpty();
                     used = isNameUsed(newName);
@@ -132,45 +147,43 @@ public class BoardController {
                         else
                             alert = "The name is already used";
 
-                        optionPaneStyle.showMessageDialog(null, alert, titleAlert,
+                        OptionPaneStyle.showMessageDialog(null, alert, titleAlert,
                                 JOptionPane.ERROR_MESSAGE);
                         break;
                     }
-                    board.setName(newName);
+                    BOARD.setName(newName);
 
                     // update the Board view
-                    boardView.update(board);
+                    WORKSPACEVIEW.update();
+                    WORKSPACEINFOVIEW.update();
+
                 }
-                case ADD_NEW_LIST -> {
-                    // Add a new list
-                    createNewList();
-                }
+                case ADD_NEW_LIST -> createNewList();
                 case DELETE_BOARD -> {
-                    // Delete the Board
-                    // Asking for confirmation before deleting the board
+                    // Asking for confirmation before deleting the BOARD
                     ConfirmationDialog dialogController = new ConfirmationDialog();
-                    String message = "Are you sure you want to delete the board : " + board.getName() + " ?";
+                    String message = "Are you sure you want to delete the BOARD : " + BOARD.getName() + " ?";
                     String title = "Confirmation";
                     boolean result = dialogController.showConfirmationDialog(message, title);
 
                     // If the user selected "Yes"
                     if (result) {
                         // Delete the Board model from the Workspace model
-                        workspace.removeBoard(board);
-                        workspaceView.update();
-                        // update the Workspace view
+                        WORKSPACE.removeBoard(BOARD);
+                        WORKSPACEVIEW.update();
+                        WORKSPACEINFOVIEW.update();
                     }
                 }
             }
         }
 
         /**
-         * This method creates a new list and adds it to the selected workspace.
+         * This method creates a new list and adds it to the selected WORKSPACE.
          * <p>
          * It prompts the user to enter the name of the new list.
-         * Then it creates a new list and adds it to the selected board.
+         * Then it creates a new list and adds it to the selected BOARD.
          * </p>
-         * 
+         *
          * @author Pierre Fromont Boissel
          * @see ManagerView
          * @see trellolite.model
@@ -178,11 +191,8 @@ public class BoardController {
          * @see javax.swing.JOptionPane
          */
         private void createNewList() {
-            // Create a new OptionPaneStyle object to display dialogs with the same style
-            OptionPaneStyle optionPaneStyle = new OptionPaneStyle();
-
             // Prompt the user to enter the name of the new list
-            Object listNameObj = optionPaneStyle.showInputDialog(null,
+            Object listNameObj = OptionPaneStyle.showInputDialog(null,
                     "Enter the name of the new List:", "New List creation",
                     JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -194,11 +204,11 @@ public class BoardController {
                 // While the list name is empty, ask the user to enter a new one
                 while (listName.isEmpty()) {
                     // Display an error message indicating that the list name cannot be empty
-                    optionPaneStyle.showMessageDialog(null, "List name cannot be empty!",
+                    OptionPaneStyle.showMessageDialog(null, "List name cannot be empty!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the list name again
-                    listNameObj = optionPaneStyle.showInputDialog(null,
+                    listNameObj = OptionPaneStyle.showInputDialog(null,
                             "Enter the name of the new list:", "New list creation",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -207,19 +217,19 @@ public class BoardController {
                 }
 
                 // Get the names of the existing lists
-                ArrayList<String> names = new ArrayList<String>();
-                for (CardList list : board.getLists()) {
+                ArrayList<String> names = new ArrayList<>();
+                for (CardList list : BOARD.getLists()) {
                     names.add(list.getName());
                 }
 
                 // While the list name already exists, ask the user to enter a new one
                 while (names.contains(listName)) {
                     // Display an error message indicating that the list name already exists
-                    optionPaneStyle.showMessageDialog(null, "list name already exists!",
+                    OptionPaneStyle.showMessageDialog(null, "list name already exists!",
                             "Error", JOptionPane.ERROR_MESSAGE);
 
                     // Prompt the user to enter the list name again
-                    listNameObj = optionPaneStyle.showInputDialog(null,
+                    listNameObj = OptionPaneStyle.showInputDialog(null,
                             "Enter the name of the new list:", "New list creation",
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
@@ -229,20 +239,20 @@ public class BoardController {
 
                 // Create the new list with the user-provided name
                 CardList list = new CardList(listName);
-                board.addList(list);
-                boardView.update(board);
+                BOARD.addList(list);
+                BOARDVIEW.update(BOARD);
             }
         }
 
         /**
-         * Check if the name is already used in the board
+         * Check if the name is already used in the BOARD
          *
-         * @param name ,String, The name to check
+         * @param name String, The name to check
          * @return boolean, True if the name is already used, false otherwise
          * @author Augustin Lecomte
          */
         private boolean isNameUsed(String name) {
-            for (Board board : workspace.getBoards()) {
+            for (Board board : WORKSPACE.getBoards()) {
                 if (board.getName().equals(name)) {
                     return true;
                 }

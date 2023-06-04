@@ -1,17 +1,12 @@
-package trellolite.controller;
+package trellolite.view;
 
 // ---------------------------------------------------------------------------------------------------------------------
 // IMPORTS
 // ---------------------------------------------------------------------------------------------------------------------
 
+import trellolite.style.*;
+
 import javax.swing.*;
-
-import trellolite.style.ButtonStyle;
-import trellolite.style.ComboBoxStyle;
-import trellolite.style.LabelStyle;
-import trellolite.style.PanelStyle;
-import trellolite.style.TextType;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -24,7 +19,7 @@ import java.util.ArrayList;
  * @see javax.swing.JFrame
  * @see javax.swing.SwingUtilities
  */
-public class ParticipantConstructor extends JFrame {
+public class ParticipantCreatorView extends JFrame {
 
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES
@@ -42,64 +37,6 @@ public class ParticipantConstructor extends JFrame {
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTORS
     // -----------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Constructor of the ParticipantConstructor.
-     * It is a pop-up window that allows the user to create a new object.
-     *
-     * @param title  : arg1 : String, the title of the window.
-     * @param width  : arg2 : int, the width of the window.
-     * @param height : arg3 : int, the height of the window.
-     * @param fields : arg5 : ArrayList<String>, the fields to display.
-     * @author Pierre Fromont Boissel
-     * @example <pre>{@code
-     * SwingUtilities.invokeLater(new Runnable() {
-     *  public void run() {
-     *      // Test constructor with only fields
-     *      ArrayList<String> fields = new ArrayList<>();
-     *      fields.add("Field 1");
-     *      fields.add("Field 2");
-     *      fields.add("Field 3");
-     *
-     *      ParticipantConstructor constructor1 = new ParticipantConstructor("Constructor 1", 400, 300, fields);
-     *     }
-     * });
-     * }</pre>
-     * @see javax.swing.SwingUtilities
-     * @see javax.swing.JFrame
-     * @see trellolite.style.PanelStyle
-     * @see trellolite.style.LabelStyle
-     * @see trellolite.style.TextType
-     * @see trellolite.style.ButtonStyle
-     * @see java.awt.GridLayout
-     * @see java.util.ArrayList
-     * @see java.lang.String
-     */
-    public ParticipantConstructor(String title, int width, int height, ArrayList<String> fields) {
-        super(title);
-        setSize(width, height);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
-
-        // main panel
-        mainPanel = new PanelStyle(new GridLayout(fields.size() + 1, 2));
-        for (String field : fields) {
-            mainPanel.add(new LabelStyle(field, TextType.TEXT));
-            mainPanel.add(new JTextField());
-        }
-        ButtonStyle confirmButton = new ButtonStyle("Confirm", 0, 0);
-        mainPanel.add(confirmButton);
-        confirmButton.addActionListener(e -> {
-            cancelled = false;
-            dispose();
-        });
-        ButtonStyle cancelButton = new ButtonStyle("Cancel", 0, 0);
-        cancelButton.addActionListener(e -> dispose());
-        mainPanel.add(cancelButton);
-        add(mainPanel);
-    }
 
     /**
      * Constructor of the ParticipantConstructor.
@@ -150,8 +87,8 @@ public class ParticipantConstructor extends JFrame {
      * @see java.util.ArrayList
      * @see java.lang.String
      */
-    public ParticipantConstructor(String title, int width, int height, ArrayList<String> fields,
-                            ArrayList<ComboBoxStyle> comboBoxes, ArrayList<String> comboBoxesLabels) {
+    public ParticipantCreatorView(String title, int width, int height, ArrayList<String> fields,
+                                  ArrayList<ComboBoxStyle> comboBoxes, ArrayList<String> comboBoxesLabels) {
         super(title);
         setSize(width, height);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -188,7 +125,7 @@ public class ParticipantConstructor extends JFrame {
     /**
      * This method returns the content of the fields.
      *
-     * @return fieldValues : ArrayList<String>, the content of the fields.
+     * @return fieldValues: ArrayList<String>, the content of the fields.
      * @author Pierre Fromont Boissel
      * @see java.awt.Component
      * @see javax.swing.JTextField
@@ -211,7 +148,7 @@ public class ParticipantConstructor extends JFrame {
     /**
      * This method returns the content of the comboBoxes.
      *
-     * @return selectedValues : ArrayList<Object>, the content of the comboBoxes.
+     * @return selectedValues: ArrayList<Object>, the content of the comboBoxes.
      * @author Pierre Fromont Boissel
      * @see java.awt.Component
      * @see trellolite.style.ComboBoxStyle

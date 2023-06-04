@@ -13,9 +13,7 @@ public enum TextType implements MyStyle {
     // -----------------------------------------------------------------------------------------------------------------
     TITLE(TITLE_FONT, TITLE_FONT_STYLE, TITLE_FONT_SIZE),
     SUBTITLE(TITLE_FONT, SUBTITLE_FONT_STYLE, SUBTITLE_FONT_SIZE),
-    TEXT(TEXT_FONT, TEXT_FONT_STYLE, TEXT_FONT_SIZE),
-    LONG_TEXT(TEXT_FONT, LONG_TEXT_FONT_STYLE, LONG_TEXT_FONT_SIZE),
-    SMALL_TEXT(TEXT_FONT, SMALL_TEXT_FONT_STYLE, SMALL_TEXT_FONT_SIZE);
+    TEXT(TEXT_FONT, TEXT_FONT_STYLE, TEXT_FONT_SIZE);
 
     // -----------------------------------------------------------------------------------------------------------------
     // ATTRIBUTES

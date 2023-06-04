@@ -41,7 +41,7 @@ public class ButtonStyle extends JButton implements MyStyle {
      * </p>
      *
      * @param text,   String,  the text of the button
-     * @param width,  int,  the width of the button
+     * @param width,  int, the width of the button
      * @param height, int, the height of the button
      * @author Pierre Fromont Boissel
      * @see ButtonStyle
@@ -83,7 +83,7 @@ public class ButtonStyle extends JButton implements MyStyle {
      * </p>
      *
      * @param text,     String,  the text of the button
-     * @param width,    int,  the width of the button
+     * @param width,    int, the width of the button
      * @param height,   int, the height of the button
      * @param fontSize, int, the font size of the button text
      * @see ButtonStyle
