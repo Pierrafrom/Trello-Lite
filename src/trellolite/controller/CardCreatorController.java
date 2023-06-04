@@ -25,6 +25,16 @@ import trellolite.style.CheckBoxPanelStyle;
 import trellolite.style.LabelStyle;
 import trellolite.style.MyStyle;
 
+/**
+ * This class is the controller of the card creator view. It allows the user to
+ * create a new card by filling the fields of the view. The user can also cancel
+ * the creation of the card.
+ * 
+ * @author Pierre Fromont Boissel
+ * @see CardCreatorView
+ * @see CardController
+ * @see CardView
+ */
 public class CardCreatorController extends JFrame {
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -43,23 +53,53 @@ public class CardCreatorController extends JFrame {
     // GETTERS
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * This method returns a boolean to know if the user cancelled the creation of
+     * the card or not.
+     * 
+     * @return boolean, true if the user cancelled the creation of the card, false
+     *         otherwise.
+     * @author Pierre Fromont Boissel
+     * @see CardCreatorController
+     */
     public boolean isCancelled() {
         return cancelled;
     }
 
+    /**
+     * This method returns the create button.
+     * 
+     * @return ButtonStyle, the create button of the card creator controller.
+     * @author Pierre Fromont Boissel
+     * @see CardCreatorController
+     * @see ButtonStyle
+     */
     public ButtonStyle getCreateButton() {
         return createButton;
     }
 
+    /**
+     * This method returns the cancel button.
+     * 
+     * @return ButtonStyle, the cancel button of the card creator controller.
+     * @author Pierre Fromont Boissel
+     * @see CardCreatorController
+     * @see ButtonStyle
+     */
     public ButtonStyle getCancelButton() {
         return cancelButton;
     }
-
 
     // -----------------------------------------------------------------------------------------------------------------
     // CONSTRUCTOR
     // -----------------------------------------------------------------------------------------------------------------
 
+    /**
+     * This constructor creates a new card creator controller. It creates the view
+     * and adds the different components to it.
+     * 
+     * 
+     */
     public CardCreatorController() {
         super("Create a new card");
         setLayout(new BorderLayout());
@@ -122,7 +162,7 @@ public class CardCreatorController extends JFrame {
         if (TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex).getMembers().size() == 0) {
             participantsLabel.setText("No participants to add");
         } else {
-            
+
             for (Object obj : TrelloMain.workspaceManager.getWorkspace(TrelloMain.selectedWorkspaceIndex)
                     .getMembers()) {
                 fields.add(obj);

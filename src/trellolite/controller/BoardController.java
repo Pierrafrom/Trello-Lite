@@ -64,6 +64,14 @@ public class BoardController {
      */
     private class ActionComboBoxListener implements ActionListener {
 
+        // ---------------------------------------------------------------------------------------------------------
+        // CONSTANTS
+        // ---------------------------------------------------------------------------------------------------------
+
+        final int RENAME_BOARD = 0;
+        final int ADD_NEW_LIST = 1;
+        final int DELETE_BOARD = 2;
+
         /**
          * Action performed when the user selects an action in the actionComboBox
          *
@@ -73,14 +81,6 @@ public class BoardController {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-
-            // ---------------------------------------------------------------------------------------------------------
-            // CONSTANTS
-            // ---------------------------------------------------------------------------------------------------------
-
-            final int RENAME_BOARD = 0;
-            final int ADD_NEW_LIST = 1;
-            final int DELETE_BOARD = 2;
 
             // Switch between the different actions of the actionComboBox
             switch (actionComboBox.getSelectedIndex()) {
@@ -98,20 +98,23 @@ public class BoardController {
 
                     String message = "Enter the new name of the board:";
                     String title = "Board name modification";
-                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null, message,title,
+                    Object ChangeBoardNameObj = optionPaneStyle.showInputDialog(null, message, title,
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
                     String newName = ChangeBoardNameObj.toString().trim();
 
-                    // Rename the Board model only if the name is not empty and unique in the workspace
+                    // Rename the Board model only if the name is not empty and unique in the
+                    // workspace
                     // Else, it displays an error message
                     empty = newName.isEmpty();
                     used = isNameUsed(newName);
-                    if(empty || used){
-                        if(empty) alert = "The name cannot be empty";
-                        else alert = "The name is already used";
+                    if (empty || used) {
+                        if (empty)
+                            alert = "The name cannot be empty";
+                        else
+                            alert = "The name is already used";
 
                         optionPaneStyle.showMessageDialog(null, alert, titleAlert,
-                                                          JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.ERROR_MESSAGE);
                         break;
                     }
                     board.setName(newName);
