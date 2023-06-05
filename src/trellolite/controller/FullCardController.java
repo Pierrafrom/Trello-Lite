@@ -23,6 +23,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+/**
+ * This class is the controller of a CARD.
+ *
+ * @author Pierre Fromont Boissel
+ * @author Augustin Lecomte
+ * @see Card
+ * @see FullCardView
+ * @see CardListView
+ * @see CardList
+ * @see ModifyCardListener
+ */
 public class FullCardController {
 
     // -----------------------------------------------------------------------------------------------------------------
